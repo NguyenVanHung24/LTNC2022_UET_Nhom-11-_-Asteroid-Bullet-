@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Asteroid UET\vclib\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\include;D:\Asteroid UET\vclib\SDL2-devel-2.0.20-VC\SDL2-2.0.20\include;D:\Asteroid UET\vclib\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Asteroid UET\vclib\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\lib\x64;D:\Asteroid UET\vclib\SDL2-devel-2.0.20-VC\SDL2-2.0.20\lib\x64;D:\Asteroid UET\vclib\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Asteroid UET\vclib\SDL2_ttf-devel-2.0.18-VC\SDL2_ttf-2.0.18\include;D:\Asteroid UET\vclib\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\include;D:\Asteroid UET\vclib\SDL2-devel-2.0.20-VC\SDL2-2.0.20\include;D:\Asteroid UET\vclib\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Asteroid UET\vclib\SDL2_ttf-devel-2.0.18-VC\SDL2_ttf-2.0.18\lib;D:\Asteroid UET\vclib\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\lib\x64;D:\Asteroid UET\vclib\SDL2-devel-2.0.20-VC\SDL2-2.0.20\lib\x64;D:\Asteroid UET\vclib\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -122,7 +122,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
