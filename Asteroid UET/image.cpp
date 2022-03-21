@@ -48,7 +48,7 @@ void RenderWindow::render(Entity& p_entity,float x,float y)
 	src.y = 0;
 	src.w;
 	src.h;
-
+	
 	SDL_QueryTexture(p_entity.getTex(), NULL, NULL, &src.w, &src.h);
 
 	SDL_Rect dst;
@@ -83,4 +83,7 @@ void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 void RenderWindow::display()
 {
 	SDL_RenderPresent(renderer);
+}
+SDL_Renderer* RenderWindow::getRender() {
+	return renderer;
 }

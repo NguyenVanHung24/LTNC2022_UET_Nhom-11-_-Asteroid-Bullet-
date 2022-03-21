@@ -17,8 +17,8 @@ public:
 	
 	
 	void display();
-	
+	SDL_Renderer* getRender();
 private: SDL_Window* window;
-	SDL_Renderer* renderer;
+	 SDL_Renderer* renderer;
 	
 };

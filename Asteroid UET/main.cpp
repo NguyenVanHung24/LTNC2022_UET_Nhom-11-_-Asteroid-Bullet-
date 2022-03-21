@@ -21,8 +21,11 @@ int main(int argc, char* args[])
 
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
 	
-	SDL_Texture* player=window.loadTexture("D:/Asteroid UET/image/player.png");
+	SDL_Texture* player= window.loadTexture("D:/Asteroid UET/image/player.png");
+	SDL_Texture* bullet = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
 
+	Entity object(bullet);
+	if (object.getTex() == NULL) std::cout << "con chim non1";
 	bool gameRunning = true;
 
 	SDL_Event event;
@@ -37,14 +40,14 @@ int main(int argc, char* args[])
 		}
 
 		window.clear();
+		SDL_SetRenderDrawColor(window.getRender(), 0xFF, 0xFF, 0xFF, 0xFF);
 		window.render(background);
-		
-		
 		window.render(100,100,player);
-
+		window.render(object, 120, 130);
+		window.render(object, 702, 130);
+		window.render(object, 1200, 130);
 		window.display();
-		std::cout<<n;
-		n++;
+		
 	}
 
 	window.cleanUp();
