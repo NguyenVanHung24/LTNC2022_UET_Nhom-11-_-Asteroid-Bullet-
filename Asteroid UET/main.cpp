@@ -3,6 +3,11 @@
 #include <iostream>
 
 #include "image.h"
+#include "player.h"
+
+
+
+
 
 int main(int argc, char* args[])
 {
@@ -14,12 +19,14 @@ int main(int argc, char* args[])
 
 	RenderWindow window("GAME v1.0", 1280, 720);
 
-	SDL_Texture* grassTexture = window.loadTexture("D:/Asteroid UET/image/background.png");
+	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
+	
+	SDL_Texture* player=window.loadTexture("D:/Asteroid UET/image/player.png");
 
 	bool gameRunning = true;
 
 	SDL_Event event;
-
+	int n=0; int x = 0; int y = 0;
 	while (gameRunning)
 	{
 		// Get our controls and events
@@ -30,9 +37,14 @@ int main(int argc, char* args[])
 		}
 
 		window.clear();
-		window.render(grassTexture);
-		window.display();
+		window.render(background);
+		
+		
+		window.render(100,100,player);
 
+		window.display();
+		std::cout<<n;
+		n++;
 	}
 
 	window.cleanUp();

@@ -1,6 +1,8 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
+#include "player.h"
+
 
 class RenderWindow
 {
@@ -10,8 +12,13 @@ public:
 	void cleanUp();
 	void clear();
 	void render(SDL_Texture* p_tex);
+	void render(Entity& p_entity,float x,float y);
+	void render(float x,float y, SDL_Texture* p_tex);
+	
+	
 	void display();
-private:
-	SDL_Window* window;
+	
+private: SDL_Window* window;
 	SDL_Renderer* renderer;
+	
 };
