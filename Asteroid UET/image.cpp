@@ -3,7 +3,7 @@
 #include <iostream>
 #include "player.h"
 #include "image.h"
-
+//create window
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 	:window(NULL), renderer(NULL)
 {
@@ -16,7 +16,7 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
-
+//load texture
 SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 {
 	SDL_Texture* texture = NULL;
@@ -28,7 +28,6 @@ SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 	return texture;
 }
 
-
 void RenderWindow::cleanUp()
 {
 	SDL_DestroyWindow(window);
@@ -38,17 +37,19 @@ void RenderWindow::clear()
 {
 	SDL_RenderClear(renderer);
 }
+//render full window
 void RenderWindow::render(SDL_Texture* p_tex) {
 	SDL_RenderCopy(renderer, p_tex, NULL, NULL);
 }
-void RenderWindow::render(Entity& p_entity,float x,float y)
+//render with entity
+void RenderWindow::render(Entity& p_entity, float x, float y)
 {
 	SDL_Rect src;
 	src.x = 0;
 	src.y = 0;
 	src.w;
 	src.h;
-	
+
 	SDL_QueryTexture(p_entity.getTex(), NULL, NULL, &src.w, &src.h);
 
 	SDL_Rect dst;
@@ -57,9 +58,10 @@ void RenderWindow::render(Entity& p_entity,float x,float y)
 	dst.w = src.w;
 	dst.h = src.h;
 
+	//std::cout << "skt";
 	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
 }
-
+//render with texture
 void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 {
 	SDL_Rect src;

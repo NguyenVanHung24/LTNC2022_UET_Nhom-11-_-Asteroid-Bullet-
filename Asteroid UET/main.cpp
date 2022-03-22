@@ -4,7 +4,7 @@
 
 #include "image.h"
 #include "player.h"
-
+#include "entity.h"
 
 
 
@@ -24,12 +24,12 @@ int main(int argc, char* args[])
 	SDL_Texture* player= window.loadTexture("D:/Asteroid UET/image/player.png");
 	SDL_Texture* bullet = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
 
-	Entity object(bullet);
+	Entity object(player);
 	if (object.getTex() == NULL) std::cout << "con chim non1";
 	bool gameRunning = true;
 
 	SDL_Event event;
-	int n=0; int x = 0; int y = 0;
+	int n=0; float x = 100; float y = 500;
 	while (gameRunning)
 	{
 		// Get our controls and events
@@ -37,15 +37,20 @@ int main(int argc, char* args[])
 		{
 			if (event.type == SDL_QUIT)
 				gameRunning = false;
+			
+			object.move(event, x, y);
+			
+			std::cout << x << y;
+			
 		}
-
 		window.clear();
-		SDL_SetRenderDrawColor(window.getRender(), 0xFF, 0xFF, 0xFF, 0xFF);
+
+		
+		
 		window.render(background);
-		window.render(100,100,player);
-		window.render(object, 120, 130);
-		window.render(object, 702, 130);
-		window.render(object, 1200, 130);
+		window.render(object, 150, 160);
+		window.render(object,x,y);
+		window.render(120, 500, player);
 		window.display();
 		
 	}

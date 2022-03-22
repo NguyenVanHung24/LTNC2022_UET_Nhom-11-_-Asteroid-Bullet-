@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "player.h"
-
+#include "entity.h"
 
 class RenderWindow
 {
@@ -12,7 +12,7 @@ public:
 	void cleanUp();
 	void clear();
 	void render(SDL_Texture* p_tex);
-	void render(Entity& p_entity,float x,float y);
+	void render(Entity& p_entity, float x,float y);
 	void render(float x,float y, SDL_Texture* p_tex);
 	
 	
