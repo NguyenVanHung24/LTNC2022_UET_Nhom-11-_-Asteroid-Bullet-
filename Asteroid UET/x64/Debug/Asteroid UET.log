@@ -1,9 +1,4 @@
-﻿  image.cpp
-D:\Asteroid UET\Asteroid UET\image.cpp(53,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\image.cpp(54,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\image.cpp(74,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\image.cpp(75,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+﻿  entity.cpp
   main.cpp
-  player.cpp
   Generating Code...
   Asteroid UET.vcxproj -> D:\Asteroid UET\x64\Debug\Asteroid UET.exe

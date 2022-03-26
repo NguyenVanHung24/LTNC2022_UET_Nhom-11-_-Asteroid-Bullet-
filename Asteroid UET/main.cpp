@@ -41,8 +41,8 @@ int main(int argc, char* args[])
 			
 			
 			player.move(event, player.x_pos, player.y_pos);
-			for (int i = 0; i < player.count; i++)
-				player.get_bullet().push_back(bull);
+			//for (int i = 0; i < player.count; i++)
+				//player.get_bullet().push_back(bull);
 		}
 		window.clear();
 		window.render(background);
@@ -52,12 +52,12 @@ int main(int argc, char* args[])
 		window.render(player, player.getX(), player.getY());
 		window.render(bull,bull.x_pos ,bull.y_pos );
 
-		vector<bullet> bangdan = player.get_bullet();
+		/*vector<bullet> bangdan = player.get_bullet();
 		for (int i = 0; i < player.count; i++)
 		{
 			bullet dan = bangdan[i];
 			window.render(dan, dan.x_pos, dan.y_pos);
-		}
+		}*/
 		
 		window.display();
 		
