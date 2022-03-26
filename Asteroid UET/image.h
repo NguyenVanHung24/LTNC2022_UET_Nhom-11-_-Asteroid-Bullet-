@@ -1,13 +1,11 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
-#include "player.h"
-#include "entity.h"
 
-class RenderWindow
-{
-public:
-	RenderWindow(const char* p_title, int p_w, int p_h);
+#include "entity.h"
+#include "bullet.h"
+class RenderWindow{	
+public: RenderWindow(const char* p_title, int p_w, int p_h);
 	SDL_Texture* loadTexture(const char* p_filePath);
 	void cleanUp();
 	void clear();
@@ -18,7 +16,7 @@ public:
 	
 	void display();
 	SDL_Renderer* getRender();
-private: SDL_Window* window;
-	 SDL_Renderer* renderer;
+	protected:SDL_Window* window;
+	SDL_Renderer* renderer;
 	
 };

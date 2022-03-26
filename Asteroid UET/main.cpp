@@ -5,10 +5,11 @@
 #include "image.h"
 #include "player.h"
 #include "entity.h"
-
-
-
-
+#include "bullet.h"
+#include <vector>
+using namespace std;
+static SDL_Window* window;
+static SDL_Renderer* renderer;
 int main(int argc, char* args[])
 {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -21,11 +22,11 @@ int main(int argc, char* args[])
 
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
 	
-	SDL_Texture* player= window.loadTexture("D:/Asteroid UET/image/player.png");
-	SDL_Texture* bullet = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
-
-	Entity object(player);
-	if (object.getTex() == NULL) std::cout << "con chim non1";
+	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player.png");
+	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
+	player player(pilot);
+	
+	bullet bull(pow);	
 	bool gameRunning = true;
 
 	SDL_Event event;
@@ -38,19 +39,26 @@ int main(int argc, char* args[])
 			if (event.type == SDL_QUIT)
 				gameRunning = false;
 			
-			object.move(event, x, y);
 			
-			std::cout << x << y;
-			
+			player.move(event, player.x_pos, player.y_pos);
+			for (int i = 0; i < player.count; i++)
+				player.get_bullet().push_back(bull);
 		}
 		window.clear();
-
-		
-		
 		window.render(background);
-		window.render(object, 150, 160);
-		window.render(object,x,y);
-		window.render(120, 500, player);
+		
+		
+		
+		window.render(player, player.getX(), player.getY());
+		window.render(bull,bull.x_pos ,bull.y_pos );
+
+		vector<bullet> bangdan = player.get_bullet();
+		for (int i = 0; i < player.count; i++)
+		{
+			bullet dan = bangdan[i];
+			window.render(dan, dan.x_pos, dan.y_pos);
+		}
+		
 		window.display();
 		
 	}

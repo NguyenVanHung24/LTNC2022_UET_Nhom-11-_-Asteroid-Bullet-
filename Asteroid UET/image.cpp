@@ -1,7 +1,4 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <iostream>
-#include "player.h"
+#pragma once
 #include "image.h"
 //create window
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
@@ -61,6 +58,7 @@ void RenderWindow::render(Entity& p_entity, float x, float y)
 	//std::cout << "skt";
 	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
 }
+
 //render with texture
 void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 {

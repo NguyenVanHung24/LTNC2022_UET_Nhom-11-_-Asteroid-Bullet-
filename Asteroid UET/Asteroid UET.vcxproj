@@ -146,8 +146,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="player.h" />
