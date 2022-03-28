@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -17,3 +19,4 @@ protected:
 	SDL_Texture* tex;
 }; 
 
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "entity.h"
 #include <vector>
@@ -17,10 +18,12 @@ public:
 	//std::vector < bullet> get_bullet() {
 		//return bullet_list;
 	//}
-	void move(SDL_Event events, float& x, float& y);
+	void move(SDL_Event events, float& x, float& y,bool& gun);
 	float x_pos;
 	float y_pos;
 	int count;
+	bool gun;
 	/*std::vector<bullet> bullet_list;*/
 }
 ;
+#endif

@@ -6,8 +6,9 @@ player::player(SDL_Texture* p_tex){
 	tex = p_tex;
 	x_pos = 200;
 	y_pos = 300;
+	gun = false;
 }
-void player::move(SDL_Event events, float& x, float& y) {
+void player::move(SDL_Event events, float& x, float& y,bool& gun) {
 	switch (events.key.keysym.sym)
 	{
 	case SDLK_UP:
@@ -26,8 +27,9 @@ void player::move(SDL_Event events, float& x, float& y) {
 
 	}//Catch mouse button
 	if (events.type == SDL_MOUSEBUTTONDOWN) {
-		count++;
+		
 		std::cout << "con chim non 3";
+		gun = true;
 	}
 }
 float player::getX() {

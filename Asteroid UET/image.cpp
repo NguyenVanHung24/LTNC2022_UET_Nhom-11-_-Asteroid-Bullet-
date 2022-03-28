@@ -87,3 +87,8 @@ void RenderWindow::display()
 SDL_Renderer* RenderWindow::getRender() {
 	return renderer;
 }
+// draw line 
+//void RenderWindow::drawlink(float x1, float y1, float x2, float y2) {
+//	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+//	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+//}

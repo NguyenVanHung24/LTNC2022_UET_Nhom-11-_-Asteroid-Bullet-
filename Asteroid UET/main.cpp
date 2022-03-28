@@ -8,8 +8,7 @@
 #include "bullet.h"
 #include <vector>
 using namespace std;
-static SDL_Window* window;
-static SDL_Renderer* renderer;
+
 int main(int argc, char* args[])
 {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -26,7 +25,8 @@ int main(int argc, char* args[])
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
 	player player(pilot);
 	
-	bullet bull(pow);	
+	bullet p_bull(pow,player.getX(),player.getY());
+	vector<bullet> bullet_list;
 	bool gameRunning = true;
 
 	SDL_Event event;
@@ -40,9 +40,15 @@ int main(int argc, char* args[])
 				gameRunning = false;
 			
 			
-			player.move(event, player.x_pos, player.y_pos);
-			//for (int i = 0; i < player.count; i++)
-				//player.get_bullet().push_back(bull);
+			player.move(event, player.x_pos, player.y_pos,player.gun);
+			//make bullet
+			if (player.gun == true) {
+				p_bull.x_pos = player.x_pos+36;
+				p_bull.y_pos = player.y_pos+18;
+				bullet_list.push_back(p_bull);
+				player.gun = false;
+			}
+			
 		}
 		window.clear();
 		window.render(background);
@@ -50,14 +56,16 @@ int main(int argc, char* args[])
 		
 		
 		window.render(player, player.getX(), player.getY());
-		window.render(bull,bull.x_pos ,bull.y_pos );
+		//window.render(p_bull,p_bull.x_pos ,p_bull.y_pos );
+		//render bullet
+		for (int i = 0; i < bullet_list.size(); i++) {
+			bullet& bull = bullet_list[i];
+			bull.x_pos = bull.x_pos + 1;
+			window.render(bull, bull.x_pos, bull.y_pos);
 
-		/*vector<bullet> bangdan = player.get_bullet();
-		for (int i = 0; i < player.count; i++)
-		{
-			bullet dan = bangdan[i];
-			window.render(dan, dan.x_pos, dan.y_pos);
-		}*/
+		}
+		//DRAW LINE
+		//window.drawlink(player.x_pos+24, player.y_pos+24, bull.x_pos, bull.y_pos);
 		
 		window.display();
 		
