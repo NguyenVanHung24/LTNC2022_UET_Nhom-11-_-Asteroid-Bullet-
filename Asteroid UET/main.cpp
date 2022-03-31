@@ -25,14 +25,18 @@ int main(int argc, char* args[])
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
 	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
-	SDL_Texture*  p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
-	
+	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
+	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
 	
 	
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
 	bullet p_bull(pow,player.getX(),player.getY());
+	bullet enemy_bull(pow_enemy);
+
+
+	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
 
@@ -42,7 +46,7 @@ int main(int argc, char* args[])
 	for (int i = 0; i < 4; i++) {
 		enemy_team.push_back(Enemy);
 		enemy_team[i].y_pos= rand()%720+i*145;
-		if (enemy_team[i].y_pos > 720) enemy_team[i].y_pos *= 0.2;
+		if (enemy_team[i].y_pos > 720-48) enemy_team[i].y_pos *= 0.2;
 		enemy_team[i].x_pos = 1208 + i * 190;
 	}
 	SDL_Event event;
@@ -69,6 +73,8 @@ int main(int argc, char* args[])
 		}
 		window.clear();
 		window.render(background);
+		
+		
 		//render enemy team and bull
 		for (int i = 0; i < 4; i++) {
 			enemy& _enemy = enemy_team[i];
@@ -76,12 +82,26 @@ int main(int argc, char* args[])
 			_enemy.x_pos -= 0.2;
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
-				_enemy.y_pos = rand() % 720;
+				_enemy.y_pos = rand() % 672;
+				enemy_bull.x_pos = _enemy.x_pos;
+				enemy_bull.y_pos = _enemy.y_pos;
+
+				if (enemy_bulls.size() > 4) continue;
+				else
+				{
+					enemy_bulls.push_back(enemy_bull);
+
+				}
 			}
 			
-			
-			
-			
+				
+		}
+		
+		for (int i = 0; i < enemy_bulls.size(); i++) {
+			bullet& e_bull = enemy_bulls[i];
+			e_bull.x_pos = e_bull.x_pos - 0.5;
+			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
+			if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
 		}
 		
 		
@@ -89,9 +109,10 @@ int main(int argc, char* args[])
 		window.render(player, player.getX(), player.getY());
 		//set condition position
 		{if (player.y_pos < 0) player.y_pos = 0;
-		if (player.y_pos > 720) player.y_pos = 720;
+		if (player.y_pos > 720-48) player.y_pos = 720-48;
+		//cout << player.y_pos;
 		if (player.x_pos < 0) player.x_pos = 0;
-		if (player.x_pos > 1280) player.x_pos = 1280;
+		if (player.x_pos > 1280-46) player.x_pos = 1280-46;
 
 		}
 		//window.render(p_bull,p_bull.x_pos ,p_bull.y_pos );
@@ -108,7 +129,7 @@ int main(int argc, char* args[])
 		window.display();
 		
 	}
-
+	
 	window.cleanUp();
 	SDL_Quit();
 
