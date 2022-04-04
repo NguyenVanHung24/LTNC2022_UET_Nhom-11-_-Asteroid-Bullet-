@@ -7,6 +7,7 @@ player::player(SDL_Texture* p_tex){
 	x_pos = 200;
 	y_pos = 300;
 	gun = false;
+	SDL_QueryTexture(p_tex, NULL, NULL, &width, &height);
 }
 void player::move(SDL_Event events, float& x, float& y,bool& gun) {
 	switch (events.key.keysym.sym)

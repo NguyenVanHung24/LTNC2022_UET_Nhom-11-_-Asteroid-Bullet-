@@ -31,11 +31,14 @@ int main(int argc, char* args[])
 	
 	//init object
 	player player(pilot);
+	
+	cout << player.width;
+	cout << player.height<<" ";
 	enemy Enemy(p_enemy);
 	bullet p_bull(pow,player.getX(),player.getY());
 	bullet enemy_bull(pow_enemy);
-
-
+	cout << enemy_bull.width<<" ";
+	cout << enemy_bull.height;
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;

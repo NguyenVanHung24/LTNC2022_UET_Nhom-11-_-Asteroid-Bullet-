@@ -1,21 +1,8 @@
-﻿  bullet.cpp
-  enemy.cpp
-D:\Asteroid UET\Asteroid UET\enemy.cpp(10,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-D:\Asteroid UET\Asteroid UET\enemy.cpp(12,19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  entity.cpp
-  image.cpp
-D:\Asteroid UET\Asteroid UET\image.cpp(53,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\image.cpp(54,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\image.cpp(74,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\image.cpp(75,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  main.cpp
-D:\Asteroid UET\Asteroid UET\main.cpp(48,34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Asteroid UET\Asteroid UET\main.cpp(49,63): warning C4305: '*=': truncation from 'double' to 'float'
-D:\Asteroid UET\Asteroid UET\main.cpp(50,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Asteroid UET\Asteroid UET\main.cpp(82,23): warning C4305: '-=': truncation from 'double' to 'float'
-D:\Asteroid UET\Asteroid UET\main.cpp(85,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Asteroid UET\Asteroid UET\main.cpp(102,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  player.cpp
-  Generating Code...
-  LINK : D:\Asteroid UET\x64\Debug\Asteroid UET.exe not found or not built by the last incremental link; performing full link
+﻿  main.cpp
+D:\Asteroid UET\Asteroid UET\main.cpp(51,34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(52,63): warning C4305: '*=': truncation from 'double' to 'float'
+D:\Asteroid UET\Asteroid UET\main.cpp(53,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(85,23): warning C4305: '-=': truncation from 'double' to 'float'
+D:\Asteroid UET\Asteroid UET\main.cpp(88,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(105,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Asteroid UET.vcxproj -> D:\Asteroid UET\x64\Debug\Asteroid UET.exe
