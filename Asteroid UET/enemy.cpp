@@ -11,6 +11,8 @@ enemy::enemy(SDL_Texture* p_tex) {
 	
 	y_pos = GetRandom(0, 720);
 	x_pos = 1280-40;
+
+	mCollider.w = 
 	
 }
 //void enemy::auto(std::vector<bullet> bullet) {

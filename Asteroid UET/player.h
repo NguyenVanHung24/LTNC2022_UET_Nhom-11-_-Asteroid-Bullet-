@@ -23,6 +23,9 @@ public:
 	float y_pos;
 	int count;
 	bool gun;
+
+	// player's collision box
+	SDL_Rect mCollider;
 	/*std::vector<bullet> bullet_list;*/
 }
 ;

@@ -12,7 +12,8 @@ public:
 	SDL_Texture* getTex();
 	SDL_Rect getCurrentFrame();
 	//void setRect(SDL_Rect& cn);
-	
+	float height, width;
+	void getSize(SDL_Texture* t);
 protected:
 	
 	SDL_Rect currentFrame;

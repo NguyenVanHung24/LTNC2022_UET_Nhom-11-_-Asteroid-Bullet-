@@ -9,5 +9,10 @@ public:
 	//void auto(std::vector<bullet> bullet);
 	float x_pos;
 	float y_pos;
+	float height;
+	float width;
+
+	// enemy's collision box
+	SDL_Rect mCollider;
 };
 #endif

@@ -21,6 +21,9 @@ SDL_Rect Entity::getCurrentFrame()
 	//currentFrame = cn;
 //}
 
+void Entity::getSize(SDL_Texture* t) {
+	SDL_QueryTexture(t, NULL, NULL, &width, &height);
+}
 
 
 SDL_Texture* Entity::getTex()

@@ -11,8 +11,13 @@ public:
 	bullet(SDL_Texture * p_tex ,float x,float y);
 	
 	void move(float& x_pos);
+
+	// bullet's position
 	float x_pos;
 	float y_pos;
+
+	// bullet's collision box
+	SDL_Rect mCollider;
 protected:
 
 };
