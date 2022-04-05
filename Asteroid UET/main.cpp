@@ -18,7 +18,7 @@ int main(int argc, char* args[])
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 
-	RenderWindow window("GAME v1.0", 1280, 720);
+	RenderWindow window("GAME v1.0", 1280, 690);
 	
 	
 	//get texture
@@ -31,14 +31,9 @@ int main(int argc, char* args[])
 	
 	//init object
 	player player(pilot);
-	
-	cout << player.width;
-	cout << player.height<<" ";
 	enemy Enemy(p_enemy);
 	bullet p_bull(pow,player.getX(),player.getY());
 	bullet enemy_bull(pow_enemy);
-	cout << enemy_bull.width<<" ";
-	cout << enemy_bull.height;
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
@@ -50,7 +45,7 @@ int main(int argc, char* args[])
 		enemy_team.push_back(Enemy);
 		enemy_team[i].y_pos= rand()%720+i*145;
 		if (enemy_team[i].y_pos > 720-48) enemy_team[i].y_pos *= 0.2;
-		enemy_team[i].x_pos = 1208 + i * 190;
+		enemy_team[i].x_pos = 1280 + i * 190;
 	}
 	SDL_Event event;
 	
@@ -63,14 +58,13 @@ int main(int argc, char* args[])
 				gameRunning = false;
 
 
-			player.move(event, player.x_pos, player.y_pos, player.gun);
+			player.move(event, player.x_pos, player.y_pos, player.gun, player.mCollider);
 			//make bullet for player
 			if (player.gun == true) {
 				p_bull.x_pos = player.x_pos + 36;
 				p_bull.y_pos = player.y_pos + 18;
 				bullet_list.push_back(p_bull);
 				player.gun = false;
-
 			}
 
 		}
@@ -81,13 +75,19 @@ int main(int argc, char* args[])
 		//render enemy team and bull
 		for (int i = 0; i < 4; i++) {
 			enemy& _enemy = enemy_team[i];
+			_enemy.mCollider.x = _enemy.x_pos;
+			_enemy.mCollider.y = _enemy.y_pos;
 			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
-			_enemy.x_pos -= 0.2;
+			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
 				_enemy.y_pos = rand() % 672;
+				_enemy.mCollider.x = _enemy.x_pos;
+				_enemy.mCollider.y = _enemy.y_pos;
 				enemy_bull.x_pos = _enemy.x_pos;
 				enemy_bull.y_pos = _enemy.y_pos;
+				enemy_bull.mCollider.x = _enemy.x_pos;
+				enemy_bull.mCollider.y = _enemy.y_pos;
 
 				if (enemy_bulls.size() > 4) continue;
 				else
@@ -103,6 +103,8 @@ int main(int argc, char* args[])
 		for (int i = 0; i < enemy_bulls.size(); i++) {
 			bullet& e_bull = enemy_bulls[i];
 			e_bull.x_pos = e_bull.x_pos - 0.5;
+			enemy_bull.mCollider.x = e_bull.x_pos;
+			enemy_bull.mCollider.y = e_bull.y_pos;
 			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
 			if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
 		}
@@ -110,10 +112,10 @@ int main(int argc, char* args[])
 		
 		//render player
 		window.render(player, player.getX(), player.getY());
+
 		//set condition position
 		{if (player.y_pos < 0) player.y_pos = 0;
 		if (player.y_pos > 720-48) player.y_pos = 720-48;
-		//cout << player.y_pos;
 		if (player.x_pos < 0) player.x_pos = 0;
 		if (player.x_pos > 1280-46) player.x_pos = 1280-46;
 
@@ -123,6 +125,8 @@ int main(int argc, char* args[])
 		for (int i = 0; i < bullet_list.size(); i++) {
 			bullet& bull = bullet_list[i];
 			bull.x_pos = bull.x_pos + 1;
+			bull.mCollider.x = bull.x_pos;
+			bull.mCollider.y = bull.y_pos;
 			window.render(bull, bull.x_pos, bull.y_pos);
 			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin()+i);
 		}
