@@ -11,7 +11,5 @@ bullet::bullet(SDL_Texture* p_tex, float x, float y ) {
 	tex = p_tex;
 	x_pos = x;
 	y_pos = y;
-	mCollider.x = x;
-	mCollider.y = y;
 }
 

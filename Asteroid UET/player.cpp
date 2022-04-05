@@ -10,6 +10,7 @@ player::player(SDL_Texture* p_tex){
 	SDL_QueryTexture(p_tex, NULL, NULL, &width, &height);
 	mCollider.w = width;
 	mCollider.h = height;
+	std::cout << mCollider.w << " " << mCollider.h << std::endl;
 	mCollider.x = x_pos;
 	mCollider.y = y_pos;
 }

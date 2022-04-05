@@ -2,7 +2,7 @@
 
 
 // this chunk of code is from lazyfoo
-bool checkCollision(SDL_Rect a, SDL_Rect b)
+/*bool checkCollision(SDL_Rect a, SDL_Rect b)
 {
     //The sides of the rectangles
     int leftA, leftB;
@@ -45,4 +45,4 @@ bool checkCollision(SDL_Rect a, SDL_Rect b)
 
     //If none of the sides from A are outside B
     return true;
-}
+}*/

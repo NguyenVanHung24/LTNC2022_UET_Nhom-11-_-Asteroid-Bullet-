@@ -10,6 +10,51 @@
 #include <vector>
 using namespace std;
 
+bool checkCollision(SDL_Rect a, SDL_Rect b)
+{
+	//The sides of the rectangles
+	int leftA, leftB;
+	int rightA, rightB;
+	int topA, topB;
+	int bottomA, bottomB;
+
+	//Calculate the sides of rect A
+	leftA = a.x;
+	rightA = a.x + a.w;
+	topA = a.y;
+	bottomA = a.y + a.h;
+
+	//Calculate the sides of rect B
+	leftB = b.x;
+	rightB = b.x + b.w;
+	topB = b.y;
+	bottomB = b.y + b.h;
+
+	//If any of the sides from A are outside of B
+	if (bottomA <= topB)
+	{
+		return false;
+	}
+
+	if (topA >= bottomB)
+	{
+		return false;
+	}
+
+	if (rightA <= leftB)
+	{
+		return false;
+	}
+
+	if (leftA >= rightB)
+	{
+		return false;
+	}
+
+	//If none of the sides from A are outside B
+	return true;
+}
+
 int main(int argc, char* args[])
 {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -18,7 +63,7 @@ int main(int argc, char* args[])
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 
-	RenderWindow window("GAME v1.0", 1280, 690);
+	RenderWindow window("GAME v1.0", 960, 540);
 	
 	
 	//get texture
@@ -79,6 +124,10 @@ int main(int argc, char* args[])
 			_enemy.mCollider.y = _enemy.y_pos;
 			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
 			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
+			if (SDL_HasIntersection(&_enemy.mCollider, &player.mCollider)) {
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
+				SDL_Quit();
+			}
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
 				_enemy.y_pos = rand() % 672;
@@ -105,6 +154,7 @@ int main(int argc, char* args[])
 			e_bull.x_pos = e_bull.x_pos - 0.5;
 			enemy_bull.mCollider.x = e_bull.x_pos;
 			enemy_bull.mCollider.y = e_bull.y_pos;
+			if (checkCollision(e_bull.mCollider, player.mCollider)) cout << "X";
 			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
 			if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
 		}
