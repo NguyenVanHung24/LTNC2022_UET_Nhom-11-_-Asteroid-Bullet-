@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="bullet.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="player.h" />

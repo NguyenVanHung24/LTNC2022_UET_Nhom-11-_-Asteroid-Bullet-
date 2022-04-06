@@ -63,7 +63,7 @@ int main(int argc, char* args[])
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 
-	RenderWindow window("GAME v1.0", 1280 , 720 );
+	RenderWindow window("GAME v1.0", 960 , 540 );
 	
 	
 	//get texture
@@ -126,10 +126,10 @@ int main(int argc, char* args[])
 			_enemy.mCollider.y = _enemy.y_pos;
 			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
 			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
-			/*if (SDL_HasIntersection(&_enemy.mCollider, &player.mCollider)) {
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "CUT LUON!", NULL);
+			if (checkCollision(_enemy.mCollider, player.mCollider)) {
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
 				SDL_Quit();
-			}*/
+			}
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
 				_enemy.y_pos = rand() % 672;
@@ -160,7 +160,10 @@ int main(int argc, char* args[])
 			e_bull.x_pos = e_bull.x_pos - 0.5;
 			enemy_bull.mCollider.x = e_bull.x_pos;
 			enemy_bull.mCollider.y = e_bull.y_pos;
-			if (checkCollision(e_bull.mCollider, player.mCollider)) cout << "X";
+			if (checkCollision(e_bull.mCollider, player.mCollider)) {
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
+				SDL_Quit();
+			}
 			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
 			
 			
@@ -199,14 +202,12 @@ int main(int argc, char* args[])
 			//set mCollider bull
 			bull.mCollider.x = bull.x_pos;
 			bull.mCollider.y = bull.y_pos;
-			cout << bull.mCollider.h;
 			// 
 			for (auto &_enemy : enemy_team)
 			{
 				if (SDL_HasIntersection(&bull.mCollider, &_enemy.mCollider)) {
 					_enemy.x_pos = 1280;
 					_enemy.y_pos = rand() % 672;
-					cout << "thay bi ban ";
 				}
 			}
 
