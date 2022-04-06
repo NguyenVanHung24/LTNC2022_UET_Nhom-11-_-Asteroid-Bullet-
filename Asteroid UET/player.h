@@ -18,7 +18,7 @@ public:
 	//std::vector < bullet> get_bullet() {
 		//return bullet_list;
 	//}
-	void move(SDL_Event events, float& x, float& y,bool& gun, SDL_Rect mCollider);
+	void move(SDL_Event events, float& x, float& y,bool& gun);
 	float x_pos;
 	float y_pos;
 	int count;

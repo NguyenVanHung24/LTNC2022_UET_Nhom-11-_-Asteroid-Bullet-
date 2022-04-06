@@ -10,34 +10,37 @@ player::player(SDL_Texture* p_tex){
 	SDL_QueryTexture(p_tex, NULL, NULL, &width, &height);
 	mCollider.w = width;
 	mCollider.h = height;
-	std::cout << mCollider.w << " " << mCollider.h << std::endl;
+	
 	mCollider.x = x_pos;
 	mCollider.y = y_pos;
+	
 }
-void player::move(SDL_Event events, float& x, float& y,bool& gun, SDL_Rect mCollider) {
+void player::move(SDL_Event events, float& x, float& y,bool& gun) {
 	switch (events.key.keysym.sym)
 	{
 	case SDLK_UP:
-		y = y - 10;
+		y = y - 15;
 		mCollider.y = y;
 		break;
 	case SDLK_DOWN:
-		y = y + 10;
+		y = y + 15;
 		mCollider.y = y;
 		break;
 	case SDLK_LEFT:
-		x = x - 10;
+		x = x - 15;
 		mCollider.x = x;
 		break;
 	case SDLK_RIGHT:
-		x = x + 10;
+		x = x + 15;
 		mCollider.x = x;
 		break;
 
-	}//Catch mouse button
-	if (events.type == SDL_MOUSEBUTTONDOWN) {
+	//Catch mouse button
+	case SDLK_SPACE:
 		gun = true;
+		break;
 	}
+	
 }
 float player::getX() {
 	return x_pos;

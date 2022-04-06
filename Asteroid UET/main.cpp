@@ -63,12 +63,12 @@ int main(int argc, char* args[])
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 
-	RenderWindow window("GAME v1.0", 960, 540);
+	RenderWindow window("GAME v1.0", 1280 , 720 );
 	
 	
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
-	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player.png");
+	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
 	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
 	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
@@ -103,7 +103,7 @@ int main(int argc, char* args[])
 				gameRunning = false;
 
 
-			player.move(event, player.x_pos, player.y_pos, player.gun, player.mCollider);
+			player.move(event, player.x_pos, player.y_pos, player.gun );
 			//make bullet for player
 			if (player.gun == true) {
 				p_bull.x_pos = player.x_pos + 36;
@@ -120,21 +120,27 @@ int main(int argc, char* args[])
 		//render enemy team and bull
 		for (int i = 0; i < 4; i++) {
 			enemy& _enemy = enemy_team[i];
+			
+			//set mCollider
 			_enemy.mCollider.x = _enemy.x_pos;
 			_enemy.mCollider.y = _enemy.y_pos;
 			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
 			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
-			if (SDL_HasIntersection(&_enemy.mCollider, &player.mCollider)) {
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
+			/*if (SDL_HasIntersection(&_enemy.mCollider, &player.mCollider)) {
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "CUT LUON!", NULL);
 				SDL_Quit();
-			}
+			}*/
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
 				_enemy.y_pos = rand() % 672;
+				
 				_enemy.mCollider.x = _enemy.x_pos;
 				_enemy.mCollider.y = _enemy.y_pos;
+				
 				enemy_bull.x_pos = _enemy.x_pos;
 				enemy_bull.y_pos = _enemy.y_pos;
+				
+				
 				enemy_bull.mCollider.x = _enemy.x_pos;
 				enemy_bull.mCollider.y = _enemy.y_pos;
 
@@ -156,7 +162,19 @@ int main(int argc, char* args[])
 			enemy_bull.mCollider.y = e_bull.y_pos;
 			if (checkCollision(e_bull.mCollider, player.mCollider)) cout << "X";
 			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
+			
+			
+			// get e_bull Collider and check player vs enemy_bull
+			e_bull.mCollider.x = e_bull.x_pos;
+			e_bull.mCollider.y = e_bull.y_pos;
+			
+			/*if (SDL_HasIntersection(&e_bull.mCollider, &player.mCollider)) {
+				cout << "ban da chet lan n";
+			}*/
+
+
 			if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
+
 		}
 		
 		
@@ -175,10 +193,25 @@ int main(int argc, char* args[])
 		for (int i = 0; i < bullet_list.size(); i++) {
 			bullet& bull = bullet_list[i];
 			bull.x_pos = bull.x_pos + 1;
+			
+			window.render(bull, bull.x_pos, bull.y_pos);
+			
+			//set mCollider bull
 			bull.mCollider.x = bull.x_pos;
 			bull.mCollider.y = bull.y_pos;
-			window.render(bull, bull.x_pos, bull.y_pos);
-			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin()+i);
+			cout << bull.mCollider.h;
+			// 
+			for (auto &_enemy : enemy_team)
+			{
+				if (SDL_HasIntersection(&bull.mCollider, &_enemy.mCollider)) {
+					_enemy.x_pos = 1280;
+					_enemy.y_pos = rand() % 672;
+					cout << "thay bi ban ";
+				}
+			}
+
+			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
+
 		}
 		//DRAW LINE
 		//window.drawlink(player.x_pos+24, player.y_pos+24, bull.x_pos, bull.y_pos);
