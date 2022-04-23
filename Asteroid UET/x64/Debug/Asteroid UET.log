@@ -22,5 +22,7 @@ D:\Asteroid UET\Asteroid UET\main.cpp(194,31): warning C4244: '=': conversion fr
 D:\Asteroid UET\Asteroid UET\main.cpp(195,31): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(236,27): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(237,27): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\Asteroid UET\Asteroid UET\main.cpp(243,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(246,58): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(246,41): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(250,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   Asteroid UET.vcxproj -> D:\Asteroid UET\x64\Debug\Asteroid UET.exe

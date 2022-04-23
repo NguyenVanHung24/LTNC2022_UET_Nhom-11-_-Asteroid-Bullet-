@@ -239,6 +239,13 @@ int main(int argc, char* args[])
 			for (auto &_enemy : enemy_team)
 			{
 				if (checkCollision(bull.mCollider, _enemy.mCollider)) {
+					int framex = 0;
+					while (framex < 390) {
+						framex++;
+						SDL_Rect* currentClip = &explo.explode[framex / 30];
+						window.renderExplosion(bull.x_pos - 50, bull.y_pos - 75, currentClip, explode);
+						SDL_RenderPresent(window.renderer);
+					}
 					_enemy.x_pos = 1280;
 					_enemy.y_pos = rand() % 672;
 				}
