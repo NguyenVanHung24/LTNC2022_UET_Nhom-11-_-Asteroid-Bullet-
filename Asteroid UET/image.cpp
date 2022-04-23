@@ -59,6 +59,15 @@ void RenderWindow::render(Entity& p_entity, float x, float y)
 	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
 }
 
+void RenderWindow::renderExplosion(int x, int y, SDL_Rect* clip, SDL_Texture* p_tex)
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, 200, 200 };
+
+	//Render to screen
+	SDL_RenderCopy(renderer, p_tex, clip, &renderQuad);
+}
+
 //render with texture
 void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 {
@@ -78,6 +87,7 @@ void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 
 	SDL_RenderCopy(renderer, p_tex, &src, &dst);
 }
+
 
 
 void RenderWindow::display()

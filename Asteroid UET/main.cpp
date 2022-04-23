@@ -7,8 +7,11 @@
 #include "entity.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "explosion.h"
 #include <vector>
 using namespace std;
+
+const int EXPLOSION_FRAME = 13;
 
 bool checkCollision(SDL_Rect a, SDL_Rect b)
 {
@@ -63,7 +66,9 @@ int main(int argc, char* args[])
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 
-	RenderWindow window("GAME v1.0", 960 , 540 );
+	RenderWindow window("GAME v1.0", 1280, 960 );
+
+
 	
 	
 	//get texture
@@ -72,6 +77,7 @@ int main(int argc, char* args[])
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
 	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
 	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
+	SDL_Texture* explode = window.loadTexture("D:/Asteroid UET/image/spritesheet.png");
 	
 	
 	//init object
@@ -82,8 +88,12 @@ int main(int argc, char* args[])
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
+	Explosion explo(explode);
 
 	bool gameRunning = true;
+
+	// load explosion
+	explo.loadExplosion();
 	
 	//init enemy
 	for (int i = 0; i < 4; i++) {
@@ -93,6 +103,8 @@ int main(int argc, char* args[])
 		enemy_team[i].x_pos = 1280 + i * 190;
 	}
 	SDL_Event event;
+
+	int frame = 0;
 	
 	while (gameRunning)
 	{
@@ -100,7 +112,7 @@ int main(int argc, char* args[])
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT)
-				gameRunning = false;
+				gameRunning =  false;
 
 
 			player.move(event, player.x_pos, player.y_pos, player.gun );
@@ -127,7 +139,12 @@ int main(int argc, char* args[])
 			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
 			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
 			if (checkCollision(_enemy.mCollider, player.mCollider)) {
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
+				while(frame < 390) {
+					frame++; 
+					SDL_Rect* currentClip = &explo.explode[frame / 30];
+					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
+					SDL_RenderPresent(window.renderer);
+				}
 				SDL_Quit();
 			}
 			if (_enemy.x_pos < 0) {
@@ -161,7 +178,13 @@ int main(int argc, char* args[])
 			enemy_bull.mCollider.x = e_bull.x_pos;
 			enemy_bull.mCollider.y = e_bull.y_pos;
 			if (checkCollision(e_bull.mCollider, player.mCollider)) {
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
+				while (frame < 390) {
+					frame++;
+					SDL_Rect* currentClip = &explo.explode[frame / 30];
+					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
+					SDL_RenderPresent(window.renderer);
+				}
+				//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
 				SDL_Quit();
 			}
 			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
@@ -182,7 +205,17 @@ int main(int argc, char* args[])
 		
 		
 		//render player
-		window.render(player, player.getX(), player.getY());
+		window.render(player, player.x_pos, player.y_pos);
+
+		/*
+		SDL_Rect* currentClip = &explo.explode[frame / 30];
+		//SDL_RenderCopy(window.renderer, explode, currentClip, NULL);
+		window.renderExplosion(300, 300, currentClip, explode);
+		SDL_RenderPresent(window.renderer);
+		frame++;
+		*/
+		
+		
 
 		//set condition position
 		{if (player.y_pos < 0) player.y_pos = 0;
@@ -205,7 +238,7 @@ int main(int argc, char* args[])
 			// 
 			for (auto &_enemy : enemy_team)
 			{
-				if (SDL_HasIntersection(&bull.mCollider, &_enemy.mCollider)) {
+				if (checkCollision(bull.mCollider, _enemy.mCollider)) {
 					_enemy.x_pos = 1280;
 					_enemy.y_pos = rand() % 672;
 				}
