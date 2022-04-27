@@ -1,5 +1,14 @@
 #pragma once
 #include "image.h"
+
+int MouseX=0, MouseY=0;
+bool CheckInside(SDL_Rect Button, int x, int y) {
+	if (x < Button.x) return false;
+	if (x > Button.x + Button.w) return false;
+	if (y < Button.y) return false;
+	if (y > Button.y + Button.h) return false;
+	return true;
+}
 //create window
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 	:window(NULL), renderer(NULL)
@@ -88,7 +97,104 @@ void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 	SDL_RenderCopy(renderer, p_tex, &src, &dst);
 }
 
+void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect& rect) {
+	TTF_Font* gFont = NULL;
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Raleway-Medium.ttf", size);
+	if (gFont == NULL)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		//Render text
+		SDL_Color textColor = { 255, 255, 0 };
+		SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, string, textColor);
+		if (textSurface == NULL)
+		{
+			printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+		}
+		else 
+		{
+			//Create texture from surface pixels
+			SDL_Texture* Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+			if (Texture == NULL)
+			{
+				printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+			}
+			SDL_Rect src;
+			src.x = 0;
+			src.y = 0;
+			src.w;
+			src.h;
 
+			SDL_QueryTexture(Texture, NULL, NULL, &src.w, &src.h);
+
+			SDL_Rect dst;
+			dst.x = x;
+			dst.y = y;
+			dst.w = src.w;
+			dst.h = src.h;
+			rect = dst;
+			//Get rid of old surface
+			SDL_FreeSurface(textSurface);
+			//std::cout << dst.x << " " << dst.y << " "<<dst.w << " "<<dst.h << " "<<'\n';
+			SDL_RenderCopy(renderer, Texture, &src, &dst);
+
+			
+		}
+
+		
+	}
+}
+void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
+	if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
+		SDL_GetMouseState(&MouseX, &MouseY);
+		std::cout << MouseX << " " << MouseY;
+	}
+	for (int i = 0; i < 3; i++) {
+		if (CheckInside(rect[i], MouseX, MouseY))
+			switch (i)
+			{
+			case 0:
+				switch (event.type)
+				{
+				case SDL_MOUSEMOTION:
+					
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					start = 0;
+					break;
+				}
+				break;
+			case 1:
+				switch (event.type)
+				{
+				case SDL_MOUSEMOTION:
+
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					start = 1;
+					break;
+				}
+				break;
+			case 2:
+				switch (event.type)
+				{
+				case SDL_MOUSEMOTION:
+
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					start = 2;
+					break;
+				}
+				break;
+			default:
+				break;
+			}
+
+		
+	}
+}
 
 void RenderWindow::display()
 {
