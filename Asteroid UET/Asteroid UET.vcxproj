@@ -156,6 +156,7 @@
     <ClInclude Include="explosion.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="music.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <iostream>
 #include <ctime>
 #include "image.h"
@@ -60,16 +61,33 @@ bool checkCollision(SDL_Rect a, SDL_Rect b)
 
 int main(int argc, char* args[])
 {
-	if (SDL_Init(SDL_INIT_VIDEO) > 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) > 0)
 		std::cout << "HEY.. SDL_Init HAS FAILED. SDL_ERROR: " << SDL_GetError() << std::endl;
 
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << endl;
+	}
+
 	RenderWindow window("GAME v1.0", 1280, 960 );
 
-
+	// music
+	Mix_Music* gMusic = NULL;
+	gMusic = Mix_LoadMUS("D:/Asteroid UET/music/mercury.ogg");
+	if (gMusic == NULL)
+	{
+		cout << "Failed to load music\n";
+	}
 	
+	// play music
+	if (Mix_PlayingMusic() == 0)
+	{
+		//Play the music
+		Mix_PlayMusic(gMusic, -1);
+	}
 	
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
