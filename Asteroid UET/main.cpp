@@ -77,6 +77,11 @@ int main(int argc, char* args[])
 	// music
 	Mix_Music* gMusic = NULL;
 	gMusic = Mix_LoadMUS("D:/Asteroid UET/music/mercury.ogg");
+	// sound effect
+	Mix_Chunk* player_fire = NULL;
+	Mix_Chunk* enemy_die = NULL;
+	player_fire = Mix_LoadWAV("D:/Asteroid UET/sound/player_fire.ogg");
+	enemy_die = Mix_LoadWAV("D:/Asteroid UET/sound/shotgun.ogg");
 	if (gMusic == NULL)
 	{
 		cout << "Failed to load music\n";
@@ -92,7 +97,7 @@ int main(int argc, char* args[])
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
 	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
-	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/alienBullet.png");
+	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/playerBullet.png");
 	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
 	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
 	SDL_Texture* explode = window.loadTexture("D:/Asteroid UET/image/spritesheet.png");
@@ -136,6 +141,8 @@ int main(int argc, char* args[])
 			player.move(event, player.x_pos, player.y_pos, player.gun );
 			//make bullet for player
 			if (player.gun == true) {
+				//play fire sound effect
+				Mix_PlayChannel(-1, player_fire, 0);
 				p_bull.x_pos = player.x_pos + 36;
 				p_bull.y_pos = player.y_pos + 18;
 				bullet_list.push_back(p_bull);
@@ -262,6 +269,7 @@ int main(int argc, char* args[])
 						framex++;
 						SDL_Rect* currentClip = &explo.explode[framex / 30];
 						window.renderExplosion(bull.x_pos - 50, bull.y_pos - 75, currentClip, explode);
+						Mix_PlayChannel(-1, enemy_die, 0);
 						SDL_RenderPresent(window.renderer);
 					}
 					_enemy.x_pos = 1280;
