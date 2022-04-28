@@ -19,13 +19,14 @@ public:
 	void rendertext(const char* string, int size,int x,int y,SDL_Rect & rect);
 	void renderExplosion(int x, int y, SDL_Rect* clip, SDL_Texture* p_tex);
 	void drawlink(float x1, float y1, float x2, float y2);
-
+	void changeColor(Uint8 x,Uint8 y,Uint8 z);
 	void handleEvent(SDL_Event event, int& start ,SDL_Rect rect[]);
 	SDL_Renderer* getRender();
 	void display();
 	
-	SDL_Window* window;
+	SDL_Window* window; 
 	SDL_Renderer* renderer;
-	
+	SDL_Color textColor = { 255, 255, 0 };
+	TTF_Font* gFont = NULL;
 };
 #endif

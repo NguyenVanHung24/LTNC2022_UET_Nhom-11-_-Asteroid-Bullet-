@@ -76,7 +76,7 @@ int main(int argc, char* args[])
 		cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << endl;
 	}
 
-	RenderWindow window("GAME v1.0", 1280, 960 );
+	RenderWindow window("GAME v1.0", 1280, 720 );
 
 	// music
 	Mix_Music* gMusic = NULL;
@@ -118,7 +118,7 @@ int main(int argc, char* args[])
 	SDL_Rect rect[3];
 	Explosion explo(explode);
 
-	bool gameRunning = true;
+	
 
 	// load explosion
 	explo.loadExplosion();
@@ -135,11 +135,11 @@ int main(int argc, char* args[])
 	int start = 1;
 	int point=0;
 	int frame = 0;
-
+	bool gameRunning = true;
 	while (gameRunning)
 	{
 		// Get our controls and events
-		while (SDL_PollEvent(&event))
+		SDL_PollEvent(&event);
 		{
 			if (event.type == SDL_QUIT)
 				gameRunning = false;
@@ -153,22 +153,29 @@ int main(int argc, char* args[])
 			window.rendertext("Exit", 60, 440, 500,rect[2]);
 			
 			window.display();
+			
 			window.handleEvent(event, start, rect);
 		}}
 		
-		if (start == 2) { gameRunning = false; }
-		if(start==0) { 
-		window.render(background);
-		player.move(event, player.x_pos, player.y_pos, player.gun);
-		//make bullet for player
-		if (player.gun == true) {
-			//play fire sound effect
-			Mix_PlayChannel(-1, player_fire, 0);
-			p_bull.x_pos = player.x_pos + 36;
-			p_bull.y_pos = player.y_pos + 18;
-			bullet_list.push_back(p_bull);
-			player.gun = false;
+		if (start == 2)
+		{
+			gameRunning = false;
+			break;
 		}
+		if (start == 0) {
+			window.render(background);
+
+			player.move(event, player.x_pos, player.y_pos, player.gun);
+			//make bullet for player
+			if (player.gun == true) {
+				//play fire sound effect
+				Mix_PlayChannel(-1, player_fire, 0);
+				p_bull.x_pos = player.x_pos + 36;
+				p_bull.y_pos = player.y_pos + 18;
+				bullet_list.push_back(p_bull);
+				player.gun = false;
+			}
+		
 
 		//render enemy team and bull
 		for (int i = 0; i < 4; i++) {
@@ -187,6 +194,14 @@ int main(int argc, char* args[])
 					SDL_RenderPresent(window.renderer);
 				}
 				//SDL_Quit();
+				 player.x_pos = 0;
+				 player.y_pos = 0;
+				player.mCollider.x = 0;
+				player.mCollider.y = 0;
+				_enemy.x_pos=1280;
+				_enemy.y_pos = 620;
+				start = 1; window.clear();
+				break;
 			}
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
@@ -212,7 +227,7 @@ int main(int argc, char* args[])
 
 
 		}
-
+		cout << enemy_bulls.size();
 		for (int i = 0; i < enemy_bulls.size(); i++) {
 			bullet& e_bull = enemy_bulls[i];
 			e_bull.x_pos = e_bull.x_pos - 0.5;
@@ -227,6 +242,14 @@ int main(int argc, char* args[])
 				}
 				//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
 				//SDL_Quit();
+				start = 1; window.clear();
+				player.mCollider.x = 0;
+				player.mCollider.y = 0;
+				player.x_pos = 0;
+				player.y_pos = 0;
+				
+				enemy_bulls.erase(enemy_bulls.begin() + i);
+				break;
 			}
 			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
 
@@ -234,10 +257,6 @@ int main(int argc, char* args[])
 			// get e_bull Collider and check player vs enemy_bull
 			e_bull.mCollider.x = e_bull.x_pos;
 			e_bull.mCollider.y = e_bull.y_pos;
-
-			/*if (SDL_HasIntersection(&e_bull.mCollider, &player.mCollider)) {
-				cout << "ban da chet lan n";
-			}*/
 
 
 			if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
@@ -303,7 +322,7 @@ int main(int argc, char* args[])
 	}
 	
 	
-	SDL_Delay(3000);
+
 	
 	window.cleanUp();
 	SDL_Quit();

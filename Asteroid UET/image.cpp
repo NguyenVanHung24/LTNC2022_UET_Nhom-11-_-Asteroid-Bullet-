@@ -98,8 +98,8 @@ void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 }
 
 void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect& rect) {
-	TTF_Font* gFont = NULL;
-	gFont = TTF_OpenFont("D:/Asteroid UET/font/Raleway-Medium.ttf", size);
+	
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/MorganChalk-L3aJy.ttf", size);
 	if (gFont == NULL)
 	{
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
@@ -107,7 +107,7 @@ void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect
 	else
 	{
 		//Render text
-		SDL_Color textColor = { 255, 255, 0 };
+		
 		SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, string, textColor);
 		if (textSurface == NULL)
 		{
@@ -137,19 +137,23 @@ void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect
 			rect = dst;
 			//Get rid of old surface
 			SDL_FreeSurface(textSurface);
-			//std::cout << dst.x << " " << dst.y << " "<<dst.w << " "<<dst.h << " "<<'\n';
+			
 			SDL_RenderCopy(renderer, Texture, &src, &dst);
-
+			SDL_DestroyTexture(Texture);
 			
 		}
 
 		
 	}
 }
+void RenderWindow::changeColor(Uint8 x,Uint8 y,Uint8 z) {
+	textColor = { x,y,z };
+};
+
 void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 	if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
 		SDL_GetMouseState(&MouseX, &MouseY);
-		std::cout << MouseX << " " << MouseY;
+		
 	}
 	for (int i = 0; i < 3; i++) {
 		if (CheckInside(rect[i], MouseX, MouseY))
@@ -159,10 +163,15 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-					
+					changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 0;
+					std::cout << "conchimnon";
+					std::cout << start;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					changeColor(255, 255, 0);
 					break;
 				}
 				break;
@@ -170,10 +179,13 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-
+					changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 1;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					changeColor(255, 255, 0);
 					break;
 				}
 				break;
@@ -181,10 +193,13 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-
+					changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 2;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					changeColor(255, 255, 0);
 					break;
 				}
 				break;
