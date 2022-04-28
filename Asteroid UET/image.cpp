@@ -99,7 +99,7 @@ void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 
 void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect& rect) {
 	
-	gFont = TTF_OpenFont("D:/Asteroid UET/font/MorganChalk-L3aJy.ttf", size);
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Aller_Rg.ttf", size);
 	if (gFont == NULL)
 	{
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
