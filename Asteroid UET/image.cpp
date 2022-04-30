@@ -140,12 +140,72 @@ void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect
 			
 			SDL_RenderCopy(renderer, Texture, &src, &dst);
 			SDL_DestroyTexture(Texture);
-			
+			Texture = NULL;
 		}
 
 		
 	}
 }
+void RenderWindow::rendertext(const char* string, int size, int x, int y) {
+	
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Aller_Rg.ttf", size);
+	if (gFont == NULL)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		//Render text
+		SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, string, textColor);
+		if (textSurface == NULL)
+		{
+			printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+		}
+		else
+		{
+			//Create texture from surface pixels
+			SDL_Texture* Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+			if (Texture == NULL)
+			{
+				printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+			}
+			SDL_Rect src;
+			src.x = 0;
+			src.y = 0;
+			src.w;
+			src.h;
+			SDL_QueryTexture(Texture, NULL, NULL, &src.w, &src.h);
+			SDL_Rect dst;
+			dst.x = x;
+			dst.y = y;
+			dst.w = src.w;
+			dst.h = src.h;
+			//Get rid of old surface
+			SDL_FreeSurface(textSurface);
+
+			SDL_RenderCopy(renderer, Texture, &src, &dst);
+			SDL_DestroyTexture(Texture);
+			Texture = NULL;
+		}
+
+
+	}
+}
+void RenderWindow::loadTextureFromText(std::string textureText, int x = 1100,int y=60) {
+	
+	SDL_Surface* loadedText = TTF_RenderText_Solid(gFont, textureText.c_str(),textColor);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedText);
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = loadedText->w;
+	dst.h = loadedText->h;
+	SDL_RenderCopy(renderer, texture, NULL, &dst);
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(loadedText);
+	loadedText = nullptr;
+}
+
 void RenderWindow::changeColor(Uint8 x,Uint8 y,Uint8 z) {
 	textColor = { x,y,z };
 };
@@ -155,7 +215,7 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 		SDL_GetMouseState(&MouseX, &MouseY);
 		
 	}
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (CheckInside(rect[i], MouseX, MouseY))
 			switch (i)
 			{
@@ -167,8 +227,6 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 0;
-					std::cout << "conchimnon";
-					std::cout << start;
 					break;
 				case SDL_MOUSEBUTTONUP:
 					changeColor(255, 255, 0);
@@ -203,6 +261,20 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 					break;
 				}
 				break;
+			case 3:
+				switch (event.type)
+				{
+				case SDL_MOUSEMOTION:
+					changeColor(250, 250, 250);
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					start = 3;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					changeColor(255, 255, 0);
+					break;
+				}
+				break;
 			default:
 				break;
 			}
@@ -218,8 +290,3 @@ void RenderWindow::display()
 SDL_Renderer* RenderWindow::getRender() {
 	return renderer;
 }
-// draw line 
-//void RenderWindow::drawlink(float x1, float y1, float x2, float y2) {
-//	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-//	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-//}

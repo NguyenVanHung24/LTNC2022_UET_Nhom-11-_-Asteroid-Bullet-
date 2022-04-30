@@ -1,6 +1,6 @@
 
 #include <SDL_mixer.h>
-
+#include <algorithm>
 #include <iostream>
 #include <ctime>
 #include "image.h"
@@ -80,7 +80,7 @@ int main(int argc, char* args[])
 
 	// music
 	Mix_Music* gMusic = NULL;
-	gMusic = Mix_LoadMUS("D:/Asteroid UET/music/mercury.ogg");
+	gMusic = Mix_LoadMUS("D:/Asteroid UET/music/Mercury.ogg");
 	// sound effect
 	Mix_Chunk* player_fire = NULL;
 	Mix_Chunk* enemy_die = NULL;
@@ -99,14 +99,14 @@ int main(int argc, char* args[])
 	}
 	
 	//get texture
-	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/background.png");
+	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka1.png");
 	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/playerBullet.png");
 	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
 	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
 	SDL_Texture* explode = window.loadTexture("D:/Asteroid UET/image/spritesheet.png");
 	SDL_Texture* backgroungimage=window.loadTexture("D:/Asteroid UET/image/menubgr1.png");
-	
+	SDL_Texture* highscore = window.loadTexture("D:/Asteroid UET/image/highscore.png");
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
@@ -115,7 +115,7 @@ int main(int argc, char* args[])
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
-	SDL_Rect rect[3];
+	SDL_Rect rect[4];
 	Explosion explo(explode);
 
 	
@@ -131,11 +131,13 @@ int main(int argc, char* args[])
 		enemy_team[i].x_pos = 1280 + i * 190;
 	}
 	SDL_Event event;
-
-	int start = 1;
+	int score[100] = {0};
+	int turn = 0;
+	int start = 3;
 	int point=0;
 	int frame = 0;
 	bool gameRunning = true;
+	
 	while (gameRunning)
 	{
 		// Get our controls and events
@@ -145,18 +147,36 @@ int main(int argc, char* args[])
 				gameRunning = false;
 		}
 		window.clear();
-		{if (start == 1)
+		{if (start == 3)
 		{
 			window.render(backgroungimage);
 			window.rendertext("Start", 60, 440, 300,rect[0]);
 			window.rendertext("High Score", 60, 440, 400,rect[1]);
 			window.rendertext("Exit", 60, 440, 500,rect[2]);
-			
-			window.display();
-			
 			window.handleEvent(event, start, rect);
+			window.display();
 		}}
-		
+		if (start == 1) {
+			window.clear();
+			
+			window.render(highscore);
+			window.rendertext("Turn Back", 60, 900, 650, rect[3]);
+			for (int j = 1; j <= 10; j++)
+			{
+				string tmp = "TOP  " + to_string(j);
+				window.rendertext(tmp.c_str(), 45, 100, 150 + 40 * j);
+
+			}
+			sort(score, score+100,greater<int>());
+			for (int j = 1; j <= 10; j++)
+			{	
+				string tmp = to_string(score[j-1]);
+				window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+
+			}
+			window.handleEvent(event, start, rect);
+			window.display();
+		}
 		if (start == 2)
 		{
 			gameRunning = false;
@@ -200,7 +220,12 @@ int main(int argc, char* args[])
 				player.mCollider.y = 0;
 				_enemy.x_pos=1280;
 				_enemy.y_pos = 620;
-				start = 1; window.clear();
+				cout << point<<endl;
+				score[turn]=point;
+				cout << turn;
+				point = 0;
+				turn=turn +1;
+				start = 3; window.clear();
 				break;
 			}
 			if (_enemy.x_pos < 0) {
@@ -227,7 +252,7 @@ int main(int argc, char* args[])
 
 
 		}
-		cout << enemy_bulls.size();
+		
 		for (int i = 0; i < enemy_bulls.size(); i++) {
 			bullet& e_bull = enemy_bulls[i];
 			e_bull.x_pos = e_bull.x_pos - 0.5;
@@ -242,12 +267,15 @@ int main(int argc, char* args[])
 				}
 				//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
 				//SDL_Quit();
-				start = 1; window.clear();
+				start = 3; window.clear();
 				player.mCollider.x = 0;
 				player.mCollider.y = 0;
 				player.x_pos = 0;
 				player.y_pos = 0;
-				
+				cout << point;
+				score[turn]=point;
+				turn++;
+				point = 0;
 				enemy_bulls.erase(enemy_bulls.begin() + i);
 				break;
 			}
@@ -266,7 +294,7 @@ int main(int argc, char* args[])
 
 		//render player
 		window.render(player, player.x_pos, player.y_pos);
-
+		
 		/*
 		SDL_Rect* currentClip = &explo.explode[frame / 30];
 		//SDL_RenderCopy(window.renderer, explode, currentClip, NULL);
@@ -309,14 +337,16 @@ int main(int argc, char* args[])
 					}
 					_enemy.x_pos = 1280;
 					_enemy.y_pos = rand() % 672;
+					point++;
 				}
 			}
 
 			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
 
 		}
-		
-
+		string s = to_string(point);
+		window.loadTextureFromText("P", 1100, 0);
+		window.loadTextureFromText(s, 1150, 0);
 		window.display();
 		}
 	}
