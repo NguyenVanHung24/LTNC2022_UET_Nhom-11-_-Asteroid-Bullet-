@@ -99,7 +99,7 @@ int main(int argc, char* args[])
 	}
 	
 	//get texture
-	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka1.png");
+	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
 	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/playerBullet.png");
 	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
@@ -345,7 +345,7 @@ int main(int argc, char* args[])
 
 		}
 		string s = to_string(point);
-		window.loadTextureFromText("P", 1100, 0);
+		window.loadTextureFromText("SCORE", 900, 0);
 		window.loadTextureFromText(s, 1150, 0);
 		window.display();
 		}
