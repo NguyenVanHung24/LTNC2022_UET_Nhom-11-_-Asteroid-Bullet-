@@ -107,6 +107,7 @@ int main(int argc, char* args[])
 	SDL_Texture* explode = window.loadTexture("D:/Asteroid UET/image/spritesheet.png");
 	SDL_Texture* backgroungimage=window.loadTexture("D:/Asteroid UET/image/menubgr1.png");
 	SDL_Texture* highscore = window.loadTexture("D:/Asteroid UET/image/highscore.png");
+	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
@@ -159,10 +160,14 @@ int main(int argc, char* args[])
 		{if (start == 3)
 		{
 			window.render(backgroungimage);
-			window.rendertext("START", 70, 570, 180, rect[0]);
-			window.rendertext("HIGH SCORE", 70, 495, 300, rect[1]);
-			window.rendertext("ABOUT", 70, 560, 420, rect[4]);
-			window.rendertext("EXIT", 70, 585, 540, rect[2]);
+			window.render(470, 215, square);
+			window.render(470, 335, square);
+			window.render(470, 455, square);
+			window.render(470, 575, square);
+			window.rendertext("START", 60, 580, 200, rect[0]);
+			window.rendertext("HIGH SCORE", 60, 515, 320, rect[1]);
+			window.rendertext("ABOUT", 60, 575, 440, rect[4]);
+			window.rendertext("EXIT", 60, 598, 560, rect[2]);
 			window.handleEvent(event, start, rect);
 			window.display();
 		}}
