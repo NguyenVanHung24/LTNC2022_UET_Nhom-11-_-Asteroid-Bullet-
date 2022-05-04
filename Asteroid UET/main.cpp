@@ -317,7 +317,7 @@ int main(int argc, char* args[])
 		for (int i = 0; i < bullet_list.size(); i++) {
 			bullet& bull = bullet_list[i];
 			bull.x_pos = bull.x_pos + 1;
-
+			if (start == 3) bullet_list.clear();
 			window.render(bull, bull.x_pos, bull.y_pos);
 
 			//set mCollider bull
@@ -340,7 +340,7 @@ int main(int argc, char* args[])
 					point++;
 				}
 			}
-
+			
 			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
 
 		}
