@@ -206,6 +206,23 @@ void RenderWindow::loadTextureFromText(std::string textureText, int x = 1100,int
 	loadedText = nullptr;
 }
 
+SDL_Texture* RenderWindow::loadTextureFromText(std::string textureText, int x = 1100, int y = 60, int size = 20) {
+
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Aller_Rg.ttf", size);
+	SDL_Surface* loadedText = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedText);
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = loadedText->w;
+	dst.h = loadedText->h;
+
+
+	SDL_FreeSurface(loadedText);
+	loadedText = nullptr;
+	return texture;
+}
+
 void RenderWindow::changeColor(Uint8 x,Uint8 y,Uint8 z) {
 	textColor = { x,y,z };
 };

@@ -90,7 +90,14 @@ int main(int argc, char* args[])
 	{
 		cout << "Failed to load music\n";
 	}
-	
+	//init text 
+	SDL_Texture* P = window.loadTextureFromText("P", 1100, 0, 60);
+	SDL_Texture* Point[500];
+	for (int i = 0; i < 500; i++) {
+		string temp = to_string(i);
+		Point[i] = window.loadTextureFromText(temp, 1150, 0, 60);
+	}
+
 	// play music
 	if (Mix_PlayingMusic() == 0)
 	{
@@ -344,9 +351,8 @@ int main(int argc, char* args[])
 			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
 
 		}
-		string s = to_string(point);
-		window.loadTextureFromText("P", 1100, 0);
-		window.loadTextureFromText(s, 1150, 0);
+		window.render(1100, 0, P);
+		window.render(1150, 0, Point[point]);
 		window.display();
 		}
 	}
