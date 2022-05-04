@@ -68,7 +68,7 @@ int main(int argc, char* args[])
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 	if (TTF_Init() == -1)
 	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError();
 		
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -150,9 +150,9 @@ int main(int argc, char* args[])
 		{if (start == 3)
 		{
 			window.render(backgroungimage);
-			window.rendertext("Start", 60, 440, 300,rect[0]);
-			window.rendertext("High Score", 60, 440, 400,rect[1]);
-			window.rendertext("Exit", 60, 440, 500,rect[2]);
+			window.rendertext("START", 60, 555, 250,rect[0]);
+			window.rendertext("HIGH SCORE", 60, 468, 350,rect[1]);
+			window.rendertext("EXIT", 60, 578, 450,rect[2]);
 			window.handleEvent(event, start, rect);
 			window.display();
 		}}
@@ -213,9 +213,8 @@ int main(int argc, char* args[])
 					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 					SDL_RenderPresent(window.renderer);
 				}
-				//SDL_Quit();
-				 player.x_pos = 0;
-				 player.y_pos = 0;
+				player.x_pos = 0;
+				player.y_pos = 0;
 				player.mCollider.x = 0;
 				player.mCollider.y = 0;
 				_enemy.x_pos=1280;
@@ -265,14 +264,11 @@ int main(int argc, char* args[])
 					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 					SDL_RenderPresent(window.renderer);
 				}
-				//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
-				//SDL_Quit();
 				start = 3; window.clear();
 				player.mCollider.x = 0;
 				player.mCollider.y = 0;
 				player.x_pos = 0;
 				player.y_pos = 0;
-				cout << point;
 				score[turn]=point;
 				turn++;
 				point = 0;
@@ -294,14 +290,6 @@ int main(int argc, char* args[])
 
 		//render player
 		window.render(player, player.x_pos, player.y_pos);
-		
-		/*
-		SDL_Rect* currentClip = &explo.explode[frame / 30];
-		//SDL_RenderCopy(window.renderer, explode, currentClip, NULL);
-		window.renderExplosion(300, 300, currentClip, explode);
-		SDL_RenderPresent(window.renderer);
-		frame++;
-		*/
 
 
 
