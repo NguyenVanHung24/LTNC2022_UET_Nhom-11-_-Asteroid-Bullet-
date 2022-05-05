@@ -99,7 +99,7 @@ void RenderWindow::render(float x,float y, SDL_Texture* p_tex)
 
 void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect& rect) {
 	
-	gFont = TTF_OpenFont("D:/Asteroid UET/font/Aller_Rg.ttf", size);
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Koulen-Regular.ttf", size);
 	if (gFont == NULL)
 	{
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
@@ -148,10 +148,10 @@ void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect
 }
 void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 	
-	gFont = TTF_OpenFont("D:/Asteroid UET/font/Aller_Rg.ttf", size);
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Koulen-Regular.ttf", size);
 	if (gFont == NULL)
 	{
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		std::cout << "Failed to load lazy font! SDL_ttf Error: ", TTF_GetError();
 	}
 	else
 	{
@@ -159,7 +159,7 @@ void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 		SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, string, textColor);
 		if (textSurface == NULL)
 		{
-			printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+			std::cout << "Unable to render text surface! SDL_ttf Error:" << TTF_GetError();
 		}
 		else
 		{
@@ -167,7 +167,7 @@ void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 			SDL_Texture* Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
 			if (Texture == NULL)
 			{
-				printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+				std::cout << "Unable to create texture from rendered text! SDL Error:" << SDL_GetError();
 			}
 			SDL_Rect src;
 			src.x = 0;
@@ -191,20 +191,24 @@ void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 
 	}
 }
-void RenderWindow::loadTextureFromText(std::string textureText, int x = 1100,int y=60) {
-	
-	SDL_Surface* loadedText = TTF_RenderText_Solid(gFont, textureText.c_str(),textColor);
+
+SDL_Texture* RenderWindow::loadTextureFromText(std::string textureText, int x = 1100, int y = 60, int size = 20) {
+
+	gFont = TTF_OpenFont("D:/Asteroid UET/font/Koulen-Regular.ttf", size);
+	SDL_Surface* loadedText = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedText);
 	SDL_Rect dst;
 	dst.x = x;
 	dst.y = y;
 	dst.w = loadedText->w;
 	dst.h = loadedText->h;
-	SDL_RenderCopy(renderer, texture, NULL, &dst);
-	SDL_DestroyTexture(texture);
+
+
 	SDL_FreeSurface(loadedText);
 	loadedText = nullptr;
+	return texture;
 }
+
 
 void RenderWindow::changeColor(Uint8 x,Uint8 y,Uint8 z) {
 	textColor = { x,y,z };

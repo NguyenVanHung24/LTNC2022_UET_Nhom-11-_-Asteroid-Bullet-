@@ -107,6 +107,7 @@ int main(int argc, char* args[])
 	SDL_Texture* explode = window.loadTexture("D:/Asteroid UET/image/spritesheet.png");
 	SDL_Texture* backgroungimage=window.loadTexture("D:/Asteroid UET/image/menubgr1.png");
 	SDL_Texture* highscore = window.loadTexture("D:/Asteroid UET/image/highscore.png");
+	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
@@ -115,13 +116,22 @@ int main(int argc, char* args[])
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
-	SDL_Rect rect[4];
+	SDL_Rect rect[5];
 	Explosion explo(explode);
 
 	
 
 	// load explosion
 	explo.loadExplosion();
+
+	//init text
+	SDL_Texture* P = window.loadTextureFromText("SCORE", 800, 0, 60);
+	SDL_Texture* Point[500];
+	for (int i = 0; i < 500; i++) {
+		string temp = to_string(i);
+		Point[i] = window.loadTextureFromText(temp, 1150, 0, 60);
+	}
+
 	
 	//init enemy
 	for (int i = 0; i < 4; i++) {
@@ -150,9 +160,14 @@ int main(int argc, char* args[])
 		{if (start == 3)
 		{
 			window.render(backgroungimage);
-			window.rendertext("START", 60, 555, 250,rect[0]);
-			window.rendertext("HIGH SCORE", 60, 468, 350,rect[1]);
-			window.rendertext("EXIT", 60, 578, 450,rect[2]);
+			window.render(470, 215, square);
+			window.render(470, 335, square);
+			window.render(470, 455, square);
+			window.render(470, 575, square);
+			window.rendertext("START", 60, 580, 200, rect[0]);
+			window.rendertext("HIGH SCORE", 60, 515, 320, rect[1]);
+			window.rendertext("ABOUT", 60, 575, 440, rect[4]);
+			window.rendertext("EXIT", 60, 598, 560, rect[2]);
 			window.handleEvent(event, start, rect);
 			window.display();
 		}}
@@ -160,7 +175,7 @@ int main(int argc, char* args[])
 			window.clear();
 			
 			window.render(highscore);
-			window.rendertext("Turn Back", 60, 900, 650, rect[3]);
+			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
 			for (int j = 1; j <= 10; j++)
 			{
 				string tmp = "TOP  " + to_string(j);
@@ -332,9 +347,8 @@ int main(int argc, char* args[])
 			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
 
 		}
-		string s = to_string(point);
-		window.loadTextureFromText("SCORE", 900, 0);
-		window.loadTextureFromText(s, 1150, 0);
+		window.render(900, 0, P);
+		window.render(1150, 0, Point[point]);
 		window.display();
 		}
 	}
