@@ -68,7 +68,7 @@ int main(int argc, char* args[])
 		std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
 	if (TTF_Init() == -1)
 	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError();
 		
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -90,14 +90,7 @@ int main(int argc, char* args[])
 	{
 		cout << "Failed to load music\n";
 	}
-	//init text 
-	SDL_Texture* P = window.loadTextureFromText("P", 1100, 0, 60);
-	SDL_Texture* Point[500];
-	for (int i = 0; i < 500; i++) {
-		string temp = to_string(i);
-		Point[i] = window.loadTextureFromText(temp, 1150, 0, 60);
-	}
-
+	
 	// play music
 	if (Mix_PlayingMusic() == 0)
 	{
@@ -106,7 +99,7 @@ int main(int argc, char* args[])
 	}
 	
 	//get texture
-	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka1.png");
+	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
 	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/playerBullet.png");
 	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
@@ -157,9 +150,9 @@ int main(int argc, char* args[])
 		{if (start == 3)
 		{
 			window.render(backgroungimage);
-			window.rendertext("Start", 60, 440, 300,rect[0]);
-			window.rendertext("High Score", 60, 440, 400,rect[1]);
-			window.rendertext("Exit", 60, 440, 500,rect[2]);
+			window.rendertext("START", 60, 555, 250,rect[0]);
+			window.rendertext("HIGH SCORE", 60, 468, 350,rect[1]);
+			window.rendertext("EXIT", 60, 578, 450,rect[2]);
 			window.handleEvent(event, start, rect);
 			window.display();
 		}}
@@ -220,9 +213,8 @@ int main(int argc, char* args[])
 					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 					SDL_RenderPresent(window.renderer);
 				}
-				//SDL_Quit();
-				 player.x_pos = 0;
-				 player.y_pos = 0;
+				player.x_pos = 0;
+				player.y_pos = 0;
 				player.mCollider.x = 0;
 				player.mCollider.y = 0;
 				_enemy.x_pos=1280;
@@ -272,14 +264,11 @@ int main(int argc, char* args[])
 					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 					SDL_RenderPresent(window.renderer);
 				}
-				//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Info", "GAME OVER!", NULL);
-				//SDL_Quit();
 				start = 3; window.clear();
 				player.mCollider.x = 0;
 				player.mCollider.y = 0;
 				player.x_pos = 0;
 				player.y_pos = 0;
-				cout << point;
 				score[turn]=point;
 				turn++;
 				point = 0;
@@ -301,14 +290,6 @@ int main(int argc, char* args[])
 
 		//render player
 		window.render(player, player.x_pos, player.y_pos);
-		
-		/*
-		SDL_Rect* currentClip = &explo.explode[frame / 30];
-		//SDL_RenderCopy(window.renderer, explode, currentClip, NULL);
-		window.renderExplosion(300, 300, currentClip, explode);
-		SDL_RenderPresent(window.renderer);
-		frame++;
-		*/
 
 
 
@@ -351,8 +332,9 @@ int main(int argc, char* args[])
 			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
 
 		}
-		window.render(1100, 0, P);
-		window.render(1150, 0, Point[point]);
+		string s = to_string(point);
+		window.loadTextureFromText("SCORE", 900, 0);
+		window.loadTextureFromText(s, 1150, 0);
 		window.display();
 		}
 	}
