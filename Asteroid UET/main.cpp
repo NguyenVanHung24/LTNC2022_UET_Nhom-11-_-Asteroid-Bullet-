@@ -10,6 +10,7 @@
 #include "bullet.h"
 #include "explosion.h"
 #include <vector>
+#include <fstream>
 using namespace std;
 
 const int EXPLOSION_FRAME = 13;
@@ -118,6 +119,8 @@ int main(int argc, char* args[])
 	vector <enemy> enemy_team;
 	SDL_Rect rect[5];
 	Explosion explo(explode);
+	//file
+	fstream f; 
 
 	
 
@@ -146,7 +149,15 @@ int main(int argc, char* args[])
 	int start = 3;
 	int point=0;
 	int frame = 0;
+	int tmp = 10;
 	bool gameRunning = true;
+	f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
+	while (!f.eof())
+	{
+		f >> score[tmp];
+		tmp++;
+	}
+	f.close();
 	
 	while (gameRunning)
 	{
@@ -172,8 +183,8 @@ int main(int argc, char* args[])
 			window.display();
 		}}
 		if (start == 1) {
-			window.clear();
 			
+			window.clear();			
 			window.render(highscore);
 			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
 			for (int j = 1; j <= 10; j++)
@@ -236,7 +247,10 @@ int main(int argc, char* args[])
 				_enemy.y_pos = 620;
 				cout << point<<endl;
 				score[turn]=point;
-				cout << turn;
+				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
+				f << point << " ";
+				f.close();
+				//cout << turn;
 				point = 0;
 				turn=turn +1;
 				start = 3; window.clear();

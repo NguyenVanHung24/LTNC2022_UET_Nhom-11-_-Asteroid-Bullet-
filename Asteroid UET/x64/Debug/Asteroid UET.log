@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿  bullet.cpp
   enemy.cpp
 D:\Asteroid UET\Asteroid UET\enemy.cpp(10,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
@@ -78,3 +79,6 @@ D:\Asteroid UET\Asteroid UET\main.cpp(337,41): warning C4244: 'argument': conver
 D:\Asteroid UET\Asteroid UET\main.cpp(342,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 >>>>>>> d368b3370010f35116ad3b3ee86b310caf902d5c
   Asteroid UET.vcxproj -> D:\Asteroid UET\x64\Debug\Asteroid UET.exe
+=======
+﻿  Asteroid UET.vcxproj -> D:\Asteroid UET\x64\Debug\Asteroid UET.exe
+>>>>>>> 4590895887fdd1e4e4123ffb072d238683417dc2
