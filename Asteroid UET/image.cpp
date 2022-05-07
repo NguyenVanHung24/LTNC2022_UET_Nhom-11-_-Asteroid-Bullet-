@@ -192,7 +192,7 @@ void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 	}
 }
 
-SDL_Texture* RenderWindow::loadTextureFromText(std::string textureText, int x = 1100, int y = 60, int size = 20) {
+SDL_Texture* RenderWindow::loadTextureFromText(std::string textureText, int x , int y, int size ) {
 
 	gFont = TTF_OpenFont("D:/Asteroid UET/font/Koulen-Regular.ttf", size);
 	SDL_Surface* loadedText = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);

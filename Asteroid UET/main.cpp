@@ -70,14 +70,14 @@ int main(int argc, char* args[])
 	if (TTF_Init() == -1)
 	{
 		cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError();
-		
+
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << endl;
 	}
 
-	RenderWindow window("GAME v1.0", 1280, 720 );
+	RenderWindow window("GAME v1.0", 1280, 720);
 
 	// music
 	Mix_Music* gMusic = NULL;
@@ -91,28 +91,28 @@ int main(int argc, char* args[])
 	{
 		cout << "Failed to load music\n";
 	}
-	
+
 	// play music
 	if (Mix_PlayingMusic() == 0)
 	{
 		//Play the music
 		Mix_PlayMusic(gMusic, -1);
 	}
-	
+
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
-	SDL_Texture* pilot= window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
+	SDL_Texture* pilot = window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/playerBullet.png");
-	SDL_Texture* p_enemy= window.loadTexture("D:/Asteroid UET/image/enemy.png");
+	SDL_Texture* p_enemy = window.loadTexture("D:/Asteroid UET/image/enemy.png");
 	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
 	SDL_Texture* explode = window.loadTexture("D:/Asteroid UET/image/spritesheet.png");
-	SDL_Texture* backgroungimage=window.loadTexture("D:/Asteroid UET/image/menubgr1.png");
+	SDL_Texture* backgroungimage = window.loadTexture("D:/Asteroid UET/image/menubgr1.png");
 	SDL_Texture* highscore = window.loadTexture("D:/Asteroid UET/image/highscore.png");
 	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
-	bullet p_bull(pow,player.getX(),player.getY());
+	bullet p_bull(pow, player.getX(), player.getY());
 	bullet enemy_bull(pow_enemy);
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
@@ -120,16 +120,16 @@ int main(int argc, char* args[])
 	SDL_Rect rect[5];
 	Explosion explo(explode);
 	//file
-	fstream f; 
+	fstream f;
 
-	
+
 
 	// load explosion
 	explo.loadExplosion();
 
 	//init text
 	SDL_Texture* P = window.loadTextureFromText("SCORE", 800, 0, 60);
-	SDL_Texture* Point[500];
+	SDL_Texture* Point[500] = {NULL};
 	for (int i = 0; i < 500; i++) {
 		string temp = to_string(i);
 		Point[i] = window.loadTextureFromText(temp, 1150, 0, 60);
@@ -144,18 +144,19 @@ int main(int argc, char* args[])
 		enemy_team[i].x_pos = 1280 + i * 190;
 	}
 	SDL_Event event;
-	int score[100] = {0};
+	vector <int> score;
 	int turn = 0;
 	int start = 3;
 	int point=0;
 	int frame = 0;
-	int tmp = 10;
+	int tmp = 0;
 	bool gameRunning = true;
 	f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
 	while (!f.eof())
 	{
-		f >> score[tmp];
-		tmp++;
+		int tmpscore;
+		f >> tmpscore;
+		score.push_back(tmpscore);
 	}
 	f.close();
 	
@@ -193,7 +194,7 @@ int main(int argc, char* args[])
 				window.rendertext(tmp.c_str(), 45, 100, 150 + 40 * j);
 
 			}
-			sort(score, score+100,greater<int>());
+			sort(score.begin(), score.end(), greater<int>());
 			for (int j = 1; j <= 10; j++)
 			{	
 				string tmp = to_string(score[j-1]);
@@ -246,7 +247,7 @@ int main(int argc, char* args[])
 				_enemy.x_pos=1280;
 				_enemy.y_pos = 620;
 				cout << point<<endl;
-				score[turn]=point;
+				score.push_back(point);
 				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
 				f << point << " ";
 				f.close();
