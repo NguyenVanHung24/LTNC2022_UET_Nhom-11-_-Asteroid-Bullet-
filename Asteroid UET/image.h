@@ -19,6 +19,7 @@ public:
 	void rendertext(const char* string, int size,int x,int y,SDL_Rect & rect);
 	void rendertext(const char* string, int size, int x, int y);
 	SDL_Texture* loadTextureFromText(std::string textureText, int x, int y, int size);
+	SDL_Texture* loadTextureFromText(std::string textureText, int x, int y, int size, SDL_Rect& rect);
 	void renderExplosion(int x, int y, SDL_Rect* clip, SDL_Texture* p_tex);
 	void drawlink(float x1, float y1, float x2, float y2);
 	void changeColor(Uint8 x,Uint8 y,Uint8 z);

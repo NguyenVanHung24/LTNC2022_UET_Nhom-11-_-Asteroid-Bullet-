@@ -122,6 +122,10 @@ int main(int argc, char* args[])
 	//file
 	fstream f;
 
+	SDL_Texture* startmenu=window.loadTextureFromText("START", 520, 200, 60, rect[0]);
+	SDL_Texture* highscoremenu=window.loadTextureFromText("HIGH SCORE", 515, 320, 60, rect[1]);
+	SDL_Texture* about=window.loadTextureFromText("ABOUT", 575, 440, 60, rect[4]);
+	SDL_Texture* exit=window.loadTextureFromText("EXIT", 598, 560, 60, rect[2]);
 
 
 	// load explosion
@@ -176,10 +180,10 @@ int main(int argc, char* args[])
 			window.render(470, 335, square);
 			window.render(470, 455, square);
 			window.render(470, 575, square);
-			window.rendertext("START", 60, 580, 200, rect[0]);
-			window.rendertext("HIGH SCORE", 60, 515, 320, rect[1]);
-			window.rendertext("ABOUT", 60, 575, 440, rect[4]);
-			window.rendertext("EXIT", 60, 598, 560, rect[2]);
+			window.render(560, 200, startmenu);
+			window.render(515, 320, highscoremenu);
+			window.render(575, 440, about);
+			window.render(598, 560, exit);
 			window.handleEvent(event, start, rect);
 			window.display();
 		}}
@@ -299,8 +303,7 @@ int main(int argc, char* args[])
 				player.mCollider.y = 0;
 				player.x_pos = 0;
 				player.y_pos = 0;
-				score[turn]=point;
-				turn++;
+				score.push_back(point);
 				point = 0;
 				enemy_bulls.erase(enemy_bulls.begin() + i);
 				break;
