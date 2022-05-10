@@ -229,7 +229,7 @@ void RenderWindow::changeColor(Uint8 x,Uint8 y,Uint8 z) {
 	textColor = { x,y,z };
 };
 
-void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
+void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 	if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
 		SDL_GetMouseState(&MouseX, &MouseY);
 		
@@ -242,13 +242,13 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-					changeColor(250, 250, 250);
+					//changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 0;
 					break;
 				case SDL_MOUSEBUTTONUP:
-					changeColor(255, 255, 0);
+					changeColor(255, 255, 255);
 					break;
 				}
 				break;
@@ -256,13 +256,13 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-					changeColor(250, 250, 250);
+					//changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 1;
 					break;
 				case SDL_MOUSEBUTTONUP:
-					changeColor(255, 255, 0);
+					changeColor(255, 255, 255);
 					break;
 				}
 				break;
@@ -270,13 +270,13 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-					changeColor(250, 250, 250);
+					//changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 2;
 					break;
 				case SDL_MOUSEBUTTONUP:
-					changeColor(255, 255, 0);
+					changeColor(255, 255, 255);
 					break;
 				}
 				break;
@@ -284,13 +284,13 @@ void RenderWindow::handleEvent(SDL_Event event, int& start,SDL_Rect rect[]) {
 				switch (event.type)
 				{
 				case SDL_MOUSEMOTION:
-					changeColor(250, 250, 250);
+					//changeColor(250, 250, 250);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 3;
 					break;
 				case SDL_MOUSEBUTTONUP:
-					changeColor(255, 255, 0);
+					changeColor(255, 255, 255);
 					break;
 				}
 				break;

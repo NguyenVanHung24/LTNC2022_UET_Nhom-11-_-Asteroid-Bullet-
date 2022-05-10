@@ -120,9 +120,9 @@ int main(int argc, char* args[])
 	SDL_Rect rect[5];
 	Explosion explo(explode);
 	//file
-	fstream f;
+	//fstream f;
 
-	SDL_Texture* startmenu=window.loadTextureFromText("START", 520, 200, 60, rect[0]);
+	SDL_Texture* startmenu=window.loadTextureFromText("START", 585, 200, 60, rect[0]);
 	SDL_Texture* highscoremenu=window.loadTextureFromText("HIGH SCORE", 515, 320, 60, rect[1]);
 	SDL_Texture* about=window.loadTextureFromText("ABOUT", 575, 440, 60, rect[4]);
 	SDL_Texture* exit=window.loadTextureFromText("EXIT", 598, 560, 60, rect[2]);
@@ -158,14 +158,14 @@ int main(int argc, char* args[])
 	vector<int> x_explosion;
 	vector<int> y_explosion;
 	bool gameRunning = true;
-	f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
+	/*f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
 	while (!f.eof())
 	{
 		int tmpscore;
 		f >> tmpscore;
 		score.push_back(tmpscore);
 	}
-	f.close();
+	f.close();*/
 	
 	while (gameRunning)
 	{
@@ -183,7 +183,7 @@ int main(int argc, char* args[])
 			window.render(470, 335, square);
 			window.render(470, 455, square);
 			window.render(470, 575, square);
-			window.render(560, 200, startmenu);
+			window.render(585, 200, startmenu);
 			window.render(515, 320, highscoremenu);
 			window.render(575, 440, about);
 			window.render(598, 560, exit);
@@ -194,6 +194,7 @@ int main(int argc, char* args[])
 			
 			window.clear();			
 			window.render(highscore);
+			window.render(825, 605, square);
 			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
 			for (int j = 1; j <= 10; j++)
 			{
@@ -202,11 +203,24 @@ int main(int argc, char* args[])
 
 			}
 			sort(score.begin(), score.end(), greater<int>());
+			if(score.size() >= 10)
 			for (int j = 1; j <= 10; j++)
 			{	
 				string tmp = to_string(score[j-1]);
 				window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
 
+			}
+			else {
+				for (int j = 1; j <=score.size(); j++)
+				{
+					string tmp = to_string(score[j - 1]);
+					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+
+				}
+				for (int j = score.size(); j <= 10; j++) {
+					string tmp = to_string(0);
+					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+				}
 			}
 			window.handleEvent(event, start, rect);
 			window.display();
@@ -255,9 +269,10 @@ int main(int argc, char* args[])
 				_enemy.y_pos = 620;
 				cout << point<<endl;
 				score.push_back(point);
-				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
+				/*f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
 				f << point << " ";
 				f.close();
+				*/
 				//cout << turn;
 				point = 0;
 				turn=turn +1;
@@ -348,27 +363,22 @@ int main(int argc, char* args[])
 			bull.mCollider.x = bull.x_pos;
 			bull.mCollider.y = bull.y_pos;
 			// 
+			bool bullet_erased = false;
 			for (auto& _enemy : enemy_team)
 			{
 				if (checkCollision(bull.mCollider, _enemy.mCollider)) {
-					/*int framex = 0;
-					while (framex < 390) {
-						framex++;
-						SDL_Rect* currentClip = &explo.explode[framex / 30];
-						window.renderExplosion(bull.x_pos - 50, bull.y_pos - 75, currentClip, explode);
-						Mix_PlayChannel(-1, enemy_die, 0);
-						SDL_RenderPresent(window.renderer);
-					}*/
 					frame.push_back(0);
 					x_explosion.push_back(_enemy.mCollider.x - 50);
 					y_explosion.push_back(_enemy.mCollider.y - 75);
+					bullet_list.erase(bullet_list.begin() + i);
+					bullet_erased = true;
 					_enemy.x_pos = 1280;
 					_enemy.y_pos = rand() % 672;
 					point++;
 				}
 			}
 			
-			if (bull.x_pos > 1280) bullet_list.erase(bullet_list.begin() + i);
+			if ((bull.x_pos > 1280)&&(bullet_erased = false)) bullet_list.erase(bullet_list.begin() + i);
 
 		}
 		window.render(900, 0, P);

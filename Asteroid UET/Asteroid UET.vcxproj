@@ -149,6 +149,7 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="image.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
