@@ -36,7 +36,7 @@ void player::move(SDL_Event events, float& x, float& y,bool& gun) {
 		break;
 
 	//Catch mouse button
-	case SDLK_KP_SPACE:
+	case SDLK_SPACE:
 		gun = true;
 		break;
 	}

@@ -109,6 +109,8 @@ int main(int argc, char* args[])
 	SDL_Texture* backgroungimage = window.loadTexture("D:/Asteroid UET/image/menubgr1.png");
 	SDL_Texture* highscore = window.loadTexture("D:/Asteroid UET/image/highscore.png");
 	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
+	SDL_Texture* button = window.loadTexture("D:/Asteroid UET/image/button.png");
+
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
