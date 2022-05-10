@@ -13,7 +13,7 @@
 #include <fstream>
 using namespace std;
 
-const int EXPLOSION_FRAME = 13;
+const int EXPLOSION_FRAME = 6;
 
 bool checkCollision(SDL_Rect a, SDL_Rect b)
 {
@@ -148,8 +148,11 @@ int main(int argc, char* args[])
 	int turn = 0;
 	int start = 3;
 	int point=0;
-	int frame = 0;
 	int tmp = 0;
+	int frameend = 0;
+	vector<int> frame;
+	vector<int> x_explosion;
+	vector<int> y_explosion;
 	bool gameRunning = true;
 	f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
 	while (!f.eof())
@@ -234,9 +237,9 @@ int main(int argc, char* args[])
 			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
 			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
 			if (checkCollision(_enemy.mCollider, player.mCollider)) {
-				while (frame < 390) {
-					frame++;
-					SDL_Rect* currentClip = &explo.explode[frame / 30];
+				while (frameend < 180) {
+					frameend++;
+					SDL_Rect* currentClip = &explo.explode[frameend / 30];
 					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 					SDL_RenderPresent(window.renderer);
 				}
@@ -288,9 +291,9 @@ int main(int argc, char* args[])
 			enemy_bull.mCollider.x = e_bull.x_pos;
 			enemy_bull.mCollider.y = e_bull.y_pos;
 			if (checkCollision(e_bull.mCollider, player.mCollider)) {
-				while (frame < 390) {
-					frame++;
-					SDL_Rect* currentClip = &explo.explode[frame / 30];
+				while (frameend < 180) {
+					frameend++;
+					SDL_Rect* currentClip = &explo.explode[frameend / 30];
 					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 					SDL_RenderPresent(window.renderer);
 				}
@@ -345,14 +348,17 @@ int main(int argc, char* args[])
 			for (auto& _enemy : enemy_team)
 			{
 				if (checkCollision(bull.mCollider, _enemy.mCollider)) {
-					int framex = 0;
+					/*int framex = 0;
 					while (framex < 390) {
 						framex++;
 						SDL_Rect* currentClip = &explo.explode[framex / 30];
 						window.renderExplosion(bull.x_pos - 50, bull.y_pos - 75, currentClip, explode);
 						Mix_PlayChannel(-1, enemy_die, 0);
 						SDL_RenderPresent(window.renderer);
-					}
+					}*/
+					frame.push_back(0);
+					x_explosion.push_back(_enemy.mCollider.x - 50);
+					y_explosion.push_back(_enemy.mCollider.y - 75);
 					_enemy.x_pos = 1280;
 					_enemy.y_pos = rand() % 672;
 					point++;
@@ -364,6 +370,15 @@ int main(int argc, char* args[])
 		}
 		window.render(900, 0, P);
 		window.render(1150, 0, Point[point]);
+		if (frame.size() >= 1) {
+			if (frame[frame.size() - 1] < 180) {
+				frame[frame.size() - 1]++;
+				SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 30];
+				window.renderExplosion(x_explosion[frame.size() - 1], y_explosion[frame.size() - 1], currentClip, explode);
+				Mix_PlayChannel(-1, enemy_die, 0);
+				SDL_RenderPresent(window.renderer);
+			}
+		}
 		window.display();
 		}
 	}
