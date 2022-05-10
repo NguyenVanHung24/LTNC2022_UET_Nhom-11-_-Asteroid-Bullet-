@@ -13,7 +13,7 @@ public:
 	float x_pos, y_pos;
 
 	bool loadExplosion();
-	SDL_Rect explode[13];
+	SDL_Rect explode[6];
 };
 
 

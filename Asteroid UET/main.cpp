@@ -119,7 +119,8 @@ int main(int argc, char* args[])
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
-	SDL_Rect rect[5];
+	SDL_Rect rect[6];
+	SDL_Rect buttonrect[3];
 	Explosion explo(explode);
 	//file
 	//fstream f;
@@ -141,12 +142,29 @@ int main(int argc, char* args[])
 		Point[i] = window.loadTextureFromText(temp, 1150, 0, 60);
 	}
 
+	//init button
+	buttonrect[0].x = 32;
+	buttonrect[0].y = 32;
+	buttonrect[0].w = 16;
+	buttonrect[0].h = 16;
+
+	buttonrect[1].x = 16;
+	buttonrect[1].y = 32;
+	buttonrect[1].w = 16;
+	buttonrect[1].h = 16;
+
+	buttonrect[2].x = 16;
+	buttonrect[2].y = 16;
+	buttonrect[2].w = 16;
+	buttonrect[2].h = 16;
+
 	
 	//init enemy
 	for (int i = 0; i < 4; i++) {
 		enemy_team.push_back(Enemy);
-		enemy_team[i].y_pos= rand()%720+i*145;
+		enemy_team[i].y_pos= rand()%720 + i*145;
 		if (enemy_team[i].y_pos > 720-48) enemy_team[i].y_pos *= 0.2;
+		if (enemy_team[i].y_pos < 100) enemy_team[i].y_pos = 100;
 		enemy_team[i].x_pos = 1280 + i * 190;
 	}
 	SDL_Event event;
@@ -235,6 +253,9 @@ int main(int argc, char* args[])
 		if (start == 0) {
 			window.render(background);
 
+			window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[4]);
+			window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[5]);
+
 			player.move(event, player.x_pos, player.y_pos, player.gun);
 			//make bullet for player
 			if (player.gun == true) {
@@ -283,7 +304,7 @@ int main(int argc, char* args[])
 			}
 			if (_enemy.x_pos < 0) {
 				_enemy.x_pos = 1280;
-				_enemy.y_pos = rand() % 672;
+				_enemy.y_pos = rand() % 672 + 100;
 
 				_enemy.mCollider.x = _enemy.x_pos;
 				_enemy.mCollider.y = _enemy.y_pos;
@@ -347,7 +368,7 @@ int main(int argc, char* args[])
 
 
 		//set condition position
-		{if (player.y_pos < 0) player.y_pos = 0;
+		{if (player.y_pos < 100) player.y_pos = 100;
 		if (player.y_pos > 720 - 48) player.y_pos = 720 - 48;
 		if (player.x_pos < 0) player.x_pos = 0;
 		if (player.x_pos > 1280 - 46) player.x_pos = 1280 - 46;
@@ -383,8 +404,8 @@ int main(int argc, char* args[])
 			if ((bull.x_pos > 1280)&&(bullet_erased = false)) bullet_list.erase(bullet_list.begin() + i);
 
 		}
-		window.render(900, 0, P);
-		window.render(1150, 0, Point[point]);
+		window.render(50, 0, P);
+		window.render(250, 0, Point[point]);
 		if (frame.size() >= 1) {
 			if (frame[frame.size() - 1] < 180) {
 				frame[frame.size() - 1]++;

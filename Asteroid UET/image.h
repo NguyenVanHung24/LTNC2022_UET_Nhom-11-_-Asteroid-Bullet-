@@ -21,6 +21,7 @@ public:
 	SDL_Texture* loadTextureFromText(std::string textureText, int x, int y, int size);
 	SDL_Texture* loadTextureFromText(std::string textureText, int x, int y, int size, SDL_Rect& rect);
 	void renderExplosion(int x, int y, SDL_Rect* clip, SDL_Texture* p_tex);
+	void renderPortion(int x, int y, int size_x, int size_y, SDL_Rect* button, SDL_Texture* p_tex, SDL_Rect &rect);
 	void drawlink(float x1, float y1, float x2, float y2);
 	void changeColor(Uint8 x,Uint8 y,Uint8 z);
 	void handleEvent(SDL_Event event, int& start ,SDL_Rect rect[]);
