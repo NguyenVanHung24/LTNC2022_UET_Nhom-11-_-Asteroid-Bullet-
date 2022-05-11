@@ -103,6 +103,9 @@ int main(int argc, char* args[])
 	//sound
 	bool sound = true;
 
+	//pause
+	bool pause = false;
+
 	//timer
 	Timer timer;
 
@@ -117,6 +120,7 @@ int main(int argc, char* args[])
 	SDL_Texture* highscore = window.loadTexture("D:/Asteroid UET/image/highscore.png");
 	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
 	SDL_Texture* button = window.loadTexture("D:/Asteroid UET/image/button.png");
+	SDL_Texture* bar = window.loadTexture("D:/Asteroid UET/image/scorebar.png");
 
 	//init object
 	player player(pilot);
@@ -127,7 +131,7 @@ int main(int argc, char* args[])
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
 	SDL_Rect rect[7]; // buttons in the game
-	SDL_Rect buttonrect[3];
+	SDL_Rect buttonrect[4];
 	Explosion explo(explode);
 	//file
 	//fstream f;
@@ -149,7 +153,7 @@ int main(int argc, char* args[])
 		Point[i] = window.loadTextureFromText(temp, 1150, 0, 60);
 	}
 
-	//init button
+	//init ui button
 	buttonrect[0].x = 32;
 	buttonrect[0].y = 32;
 	buttonrect[0].w = 16;
@@ -164,6 +168,11 @@ int main(int argc, char* args[])
 	buttonrect[2].y = 16;
 	buttonrect[2].w = 16;
 	buttonrect[2].h = 16;
+
+	buttonrect[3].x = 32;
+	buttonrect[3].y = 0;
+	buttonrect[3].w = 16;
+	buttonrect[3].h = 16;
 
 	
 	//init enemy
@@ -220,7 +229,7 @@ int main(int argc, char* args[])
 			// sound handle
 			if (sound == true) window.renderPortion(30, 620, 75, 75, &buttonrect[0], button, rect[5]);
 			else window.renderPortion(30, 620, 75, 75, &buttonrect[1], button, rect[5]);
-			window.handleSound(event, sound, rect[5]);
+			window.handleState(event, sound, rect[5]);
 			if (sound == false) Mix_PauseMusic();
 			else Mix_ResumeMusic();
 
@@ -269,177 +278,189 @@ int main(int argc, char* args[])
 			break;
 		}
 		if (start == 0) {
-			window.render(background);
+			if (pause == false) {
+				window.render(background);
 
-			window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
+				window.render(0, 0, bar);
 
-			// sound handle
-			if (sound == true) window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[5]);
-			else window.renderPortion(1080, 10, 75, 75, &buttonrect[1], button, rect[5]);
-			window.handleSound(event, sound, rect[5]);
-			if (sound == false) Mix_PauseMusic();
-			else Mix_ResumeMusic();
+				// sound handle
+				if (sound == true) window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[5]);
+				else window.renderPortion(1080, 10, 75, 75, &buttonrect[1], button, rect[5]);
+				window.handleState(event, sound, rect[5]);
 
-			player.move(event, player.x_pos, player.y_pos, player.gun);
-			//make bullet for player
-			if (player.gun == true) {
-				//play fire sound effect
-				Mix_PlayChannel(-1, player_fire, 0);
-				p_bull.x_pos = player.x_pos + 36;
-				p_bull.y_pos = player.y_pos + 18;
-				bullet_list.push_back(p_bull);
-				player.gun = false;
-			}
-		
+				if (sound == false) Mix_PauseMusic();
+				else Mix_ResumeMusic();
 
-		//render enemy team and bull
-		for (int i = 0; i < 4; i++) {
-			enemy& _enemy = enemy_team[i];
+				//pause button
+				window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
+				window.handleState(event, pause, rect[6]);
 
-			//set mCollider
-			_enemy.mCollider.x = _enemy.x_pos;
-			_enemy.mCollider.y = _enemy.y_pos;
-			window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
-			_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
-			if (checkCollision(_enemy.mCollider, player.mCollider)) {
-				while (frameend < 180) {
-					frameend++;
-					SDL_Rect* currentClip = &explo.explode[frameend / 30];
-					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
-					SDL_RenderPresent(window.renderer);
+				player.move(event, player.x_pos, player.y_pos, player.gun);
+				//make bullet for player
+				if (player.gun == true) {
+					//play fire sound effect
+					if (sound == true)Mix_PlayChannel(-1, player_fire, 0);
+					p_bull.x_pos = player.x_pos + 36;
+					p_bull.y_pos = player.y_pos + 18;
+					bullet_list.push_back(p_bull);
+					player.gun = false;
 				}
-				player.x_pos = 0;
-				player.y_pos = 0;
-				player.mCollider.x = 0;
-				player.mCollider.y = 0;
-				_enemy.x_pos=1280;
-				_enemy.y_pos = 620;
-				cout << point<<endl;
-				score.push_back(point);
-				/*f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
-				f << point << " ";
-				f.close();
-				*/
-				//cout << turn;
-				point = 0;
-				turn=turn +1;
-				start = 3; window.clear();
-				break;
-			}
-			if (_enemy.x_pos < 0) {
-				_enemy.x_pos = 1280;
-				_enemy.y_pos = rand() % 672 + 100;
-
-				_enemy.mCollider.x = _enemy.x_pos;
-				_enemy.mCollider.y = _enemy.y_pos;
-
-				enemy_bull.x_pos = _enemy.x_pos;
-				enemy_bull.y_pos = _enemy.y_pos;
 
 
-				enemy_bull.mCollider.x = _enemy.x_pos;
-				enemy_bull.mCollider.y = _enemy.y_pos;
+				//render enemy team and bull
+				for (int i = 0; i < 4; i++) {
+					enemy& _enemy = enemy_team[i];
 
-				if (enemy_bulls.size() > 4) continue;
-				else
-				{
-					enemy_bulls.push_back(enemy_bull);
+					//set mCollider
+					_enemy.mCollider.x = _enemy.x_pos;
+					_enemy.mCollider.y = _enemy.y_pos;
+					window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
+					_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
+					if (checkCollision(_enemy.mCollider, player.mCollider)) {
+						while (frameend < 180) {
+							frameend++;
+							SDL_Rect* currentClip = &explo.explode[frameend / 30];
+							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
+							SDL_RenderPresent(window.renderer);
+						}
+						player.x_pos = 0;
+						player.y_pos = 0;
+						player.mCollider.x = 0;
+						player.mCollider.y = 0;
+						_enemy.x_pos = 1280;
+						_enemy.y_pos = 620;
+						cout << point << endl;
+						score.push_back(point);
+						/*f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
+						f << point << " ";
+						f.close();
+						*/
+						//cout << turn;
+						point = 0;
+						turn = turn + 1;
+						start = 3; window.clear();
+						break;
+					}
+					if (_enemy.x_pos < 0) {
+						_enemy.x_pos = 1280;
+						_enemy.y_pos = rand() % 672 + 100;
+
+						_enemy.mCollider.x = _enemy.x_pos;
+						_enemy.mCollider.y = _enemy.y_pos;
+
+						enemy_bull.x_pos = _enemy.x_pos;
+						enemy_bull.y_pos = _enemy.y_pos;
+
+
+						enemy_bull.mCollider.x = _enemy.x_pos;
+						enemy_bull.mCollider.y = _enemy.y_pos;
+
+						if (enemy_bulls.size() > 4) continue;
+						else
+						{
+							enemy_bulls.push_back(enemy_bull);
+
+						}
+					}
+
 
 				}
-			}
+
+				for (int i = 0; i < enemy_bulls.size(); i++) {
+					bullet& e_bull = enemy_bulls[i];
+					e_bull.x_pos = e_bull.x_pos - 0.5;
+					enemy_bull.mCollider.x = e_bull.x_pos;
+					enemy_bull.mCollider.y = e_bull.y_pos;
+					if (checkCollision(e_bull.mCollider, player.mCollider)) {
+						while (frameend < 180) {
+							frameend++;
+							SDL_Rect* currentClip = &explo.explode[frameend / 30];
+							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
+							SDL_RenderPresent(window.renderer);
+						}
+						start = 3; window.clear();
+						player.mCollider.x = 0;
+						player.mCollider.y = 0;
+						player.x_pos = 0;
+						player.y_pos = 0;
+						score.push_back(point);
+						point = 0;
+						enemy_bulls.erase(enemy_bulls.begin() + i);
+						break;
+					}
+					window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
 
 
-		}
-		
-		for (int i = 0; i < enemy_bulls.size(); i++) {
-			bullet& e_bull = enemy_bulls[i];
-			e_bull.x_pos = e_bull.x_pos - 0.5;
-			enemy_bull.mCollider.x = e_bull.x_pos;
-			enemy_bull.mCollider.y = e_bull.y_pos;
-			if (checkCollision(e_bull.mCollider, player.mCollider)) {
-				while (frameend < 180) {
-					frameend++;
-					SDL_Rect* currentClip = &explo.explode[frameend / 30];
-					window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
-					SDL_RenderPresent(window.renderer);
+					// get e_bull Collider and check player vs enemy_bull
+					e_bull.mCollider.x = e_bull.x_pos;
+					e_bull.mCollider.y = e_bull.y_pos;
+
+
+					if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
+
 				}
-				start = 3; window.clear();
-				player.mCollider.x = 0;
-				player.mCollider.y = 0;
-				player.x_pos = 0;
-				player.y_pos = 0;
-				score.push_back(point);
-				point = 0;
-				enemy_bulls.erase(enemy_bulls.begin() + i);
-				break;
-			}
-			window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
 
 
-			// get e_bull Collider and check player vs enemy_bull
-			e_bull.mCollider.x = e_bull.x_pos;
-			e_bull.mCollider.y = e_bull.y_pos;
-
-
-			if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
-
-		}
-
-
-		//render player
-		window.render(player, player.x_pos, player.y_pos);
+				//render player
+				window.render(player, player.x_pos, player.y_pos);
 
 
 
-		//set condition position
-		{if (player.y_pos < 100) player.y_pos = 100;
-		if (player.y_pos > 720 - 48) player.y_pos = 720 - 48;
-		if (player.x_pos < 0) player.x_pos = 0;
-		if (player.x_pos > 1280 - 46) player.x_pos = 1280 - 46;
+				//set condition position
+				{if (player.y_pos < 100) player.y_pos = 100;
+				if (player.y_pos > 720 - 48) player.y_pos = 720 - 48;
+				if (player.x_pos < 0) player.x_pos = 0;
+				if (player.x_pos > 1280 - 46) player.x_pos = 1280 - 46;
 
-		}
-		
-		//render bullet for player
-		for (int i = 0; i < bullet_list.size(); i++) {
-			bullet& bull = bullet_list[i];
-			bull.x_pos = bull.x_pos + 1;
-			if (start == 3) bullet_list.clear();
-			window.render(bull, bull.x_pos, bull.y_pos);
-
-			//set mCollider bull
-			bull.mCollider.x = bull.x_pos;
-			bull.mCollider.y = bull.y_pos;
-			// 
-			bool bullet_erased = false;
-			for (auto& _enemy : enemy_team)
-			{
-				if (checkCollision(bull.mCollider, _enemy.mCollider)) {
-					frame.push_back(0);
-					x_explosion.push_back(_enemy.mCollider.x - 50);
-					y_explosion.push_back(_enemy.mCollider.y - 75);
-					bullet_list.erase(bullet_list.begin() + i);
-					bullet_erased = true;
-					_enemy.x_pos = 1280;
-					_enemy.y_pos = rand() % 672;
-					point++;
 				}
-			}
-			
-			if ((bull.x_pos > 1280)&&(bullet_erased = false)) bullet_list.erase(bullet_list.begin() + i);
 
-		}
-		window.render(50, 0, P);
-		window.render(250, 0, Point[point]);
-		if (frame.size() >= 1) {
-			if (frame[frame.size() - 1] < 180) {
-				frame[frame.size() - 1]++;
-				SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 30];
-				window.renderExplosion(x_explosion[frame.size() - 1], y_explosion[frame.size() - 1], currentClip, explode);
-				Mix_PlayChannel(-1, enemy_die, 0);
-				SDL_RenderPresent(window.renderer);
+				//render bullet for player
+				for (int i = 0; i < bullet_list.size(); i++) {
+					bullet& bull = bullet_list[i];
+					bull.x_pos = bull.x_pos + 1;
+					if (start == 3) bullet_list.clear();
+					window.render(bull, bull.x_pos, bull.y_pos);
+
+					//set mCollider bull
+					bull.mCollider.x = bull.x_pos;
+					bull.mCollider.y = bull.y_pos;
+					// 
+					bool bullet_erased = false;
+					for (auto& _enemy : enemy_team)
+					{
+						if (checkCollision(bull.mCollider, _enemy.mCollider)) {
+							frame.push_back(0);
+							x_explosion.push_back(_enemy.mCollider.x - 50);
+							y_explosion.push_back(_enemy.mCollider.y - 75);
+							bullet_list.erase(bullet_list.begin() + i);
+							bullet_erased = true;
+							_enemy.x_pos = 1280;
+							_enemy.y_pos = rand() % 672 + 100;
+							point++;
+						}
+					}
+
+					if ((bull.x_pos > 1280) && (bullet_erased = false)) bullet_list.erase(bullet_list.begin() + i);
+
+				}
+				window.render(50, 0, P);
+				window.render(250, 0, Point[point]);
+				if (frame.size() >= 1) {
+					if (frame[frame.size() - 1] < 180) {
+						frame[frame.size() - 1]++;
+						SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 30];
+						window.renderExplosion(x_explosion[frame.size() - 1], y_explosion[frame.size() - 1], currentClip, explode);
+						if (sound == true)Mix_PlayChannel(-1, enemy_die, 0);
+						SDL_RenderPresent(window.renderer);
+					}
+				}
+				window.display();
 			}
-		}
-		window.display();
+			else {
+				//pause button
+				window.handleState(event, pause, rect[6]);
+				SDL_Delay(100);
+			}
 		}
 	}
 	

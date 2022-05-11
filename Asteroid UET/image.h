@@ -25,7 +25,7 @@ public:
 	void drawlink(float x1, float y1, float x2, float y2);
 	void changeColor(Uint8 x,Uint8 y,Uint8 z);
 	void handleEvent(SDL_Event event, int& start ,SDL_Rect rect[]);
-	void handleSound(SDL_Event event, bool& sound, SDL_Rect rect);
+	void handleState(SDL_Event event, bool& sound, SDL_Rect rect);
 	SDL_Renderer* getRender();
 	void display();
 	

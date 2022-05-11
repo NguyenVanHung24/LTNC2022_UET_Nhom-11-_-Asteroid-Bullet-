@@ -312,15 +312,14 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 	}
 }
 
-void RenderWindow::handleSound(SDL_Event event, bool& sound, SDL_Rect rect) {
+void RenderWindow::handleState(SDL_Event event, bool& state, SDL_Rect rect) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		SDL_GetMouseState(&MouseX, &MouseY);
 	}
 	if (CheckInside(rect, MouseX, MouseY)) {
 		if (event.type == SDL_MOUSEBUTTONUP) {
-			if (sound == true) sound = false;
-			else sound = true;
-			std::cout << sound;
+			if (state == true) state = false;
+			else state = true;
 		}
 	}
 }
