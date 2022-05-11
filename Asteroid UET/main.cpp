@@ -9,6 +9,7 @@
 #include "enemy.h"
 #include "bullet.h"
 #include "explosion.h"
+#include "time.h"
 #include <vector>
 #include <fstream>
 using namespace std;
@@ -99,6 +100,12 @@ int main(int argc, char* args[])
 		Mix_PlayMusic(gMusic, -1);
 	}
 
+	//sound
+	bool sound = true;
+
+	//timer
+	Timer timer;
+
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
 	SDL_Texture* pilot = window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
@@ -119,7 +126,7 @@ int main(int argc, char* args[])
 	vector <bullet> enemy_bulls;
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
-	SDL_Rect rect[6];
+	SDL_Rect rect[7]; // buttons in the game
 	SDL_Rect buttonrect[3];
 	Explosion explo(explode);
 	//file
@@ -198,6 +205,7 @@ int main(int argc, char* args[])
 		window.clear();
 		{if (start == 3)
 		{
+
 			window.render(backgroungimage);
 			window.render(470, 215, square);
 			window.render(470, 335, square);
@@ -208,7 +216,17 @@ int main(int argc, char* args[])
 			window.render(575, 440, about);
 			window.render(598, 560, exit);
 			window.handleEvent(event, start, rect);
+
+			// sound handle
+			if (sound == true) window.renderPortion(30, 620, 75, 75, &buttonrect[0], button, rect[5]);
+			else window.renderPortion(30, 620, 75, 75, &buttonrect[1], button, rect[5]);
+			window.handleSound(event, sound, rect[5]);
+			if (sound == false) Mix_PauseMusic();
+			else Mix_ResumeMusic();
+
+
 			window.display();
+
 		}}
 		if (start == 1) {
 			
@@ -253,8 +271,14 @@ int main(int argc, char* args[])
 		if (start == 0) {
 			window.render(background);
 
-			window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[4]);
-			window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[5]);
+			window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
+
+			// sound handle
+			if (sound == true) window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[5]);
+			else window.renderPortion(1080, 10, 75, 75, &buttonrect[1], button, rect[5]);
+			window.handleSound(event, sound, rect[5]);
+			if (sound == false) Mix_PauseMusic();
+			else Mix_ResumeMusic();
 
 			player.move(event, player.x_pos, player.y_pos, player.gun);
 			//make bullet for player

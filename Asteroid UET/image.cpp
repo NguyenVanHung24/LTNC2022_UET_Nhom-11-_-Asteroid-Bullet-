@@ -244,7 +244,7 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 		SDL_GetMouseState(&MouseX, &MouseY);
 		
 	}
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 5; i++) {
 		if (CheckInside(rect[i], MouseX, MouseY))
 			switch (i)
 			{
@@ -309,6 +309,19 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 			}
 
 		
+	}
+}
+
+void RenderWindow::handleSound(SDL_Event event, bool& sound, SDL_Rect rect) {
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		SDL_GetMouseState(&MouseX, &MouseY);
+	}
+	if (CheckInside(rect, MouseX, MouseY)) {
+		if (event.type == SDL_MOUSEBUTTONUP) {
+			if (sound == true) sound = false;
+			else sound = true;
+			std::cout << sound;
+		}
 	}
 }
 
