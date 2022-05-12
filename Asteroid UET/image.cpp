@@ -304,6 +304,20 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 					break;
 				}
 				break;
+			case 4:
+				switch (event.type)
+				{
+				case SDL_MOUSEMOTION:
+					//changeColor(250, 250, 250);
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					start = 4;
+					break;
+				case SDL_MOUSEBUTTONUP:
+					changeColor(255, 255, 255);
+					break;
+				}
+				break;
 			default:
 				break;
 			}
@@ -312,14 +326,18 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 	}
 }
 
-void RenderWindow::handleState(SDL_Event event, bool& state, SDL_Rect rect) {
+void RenderWindow::handleState(SDL_Event event, bool& state, SDL_Rect rect, SDL_Window* window) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		SDL_GetMouseState(&MouseX, &MouseY);
 	}
 	if (CheckInside(rect, MouseX, MouseY)) {
 		if (event.type == SDL_MOUSEBUTTONUP) {
-			if (state == true) state = false;
-			else state = true;
+			if (state == true) {
+				state = false;
+			}
+			else {
+				state = true;
+			}
 		}
 	}
 }

@@ -121,6 +121,7 @@ int main(int argc, char* args[])
 	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
 	SDL_Texture* button = window.loadTexture("D:/Asteroid UET/image/button.png");
 	SDL_Texture* bar = window.loadTexture("D:/Asteroid UET/image/scorebar.png");
+	SDL_Texture* menubgr = window.loadTexture("D:/Asteroid UET/image/menubgr.png");
 
 	//init object
 	player player(pilot);
@@ -131,16 +132,17 @@ int main(int argc, char* args[])
 	vector <bullet> bullet_list;
 	vector <enemy> enemy_team;
 	SDL_Rect rect[7]; // buttons in the game
-	SDL_Rect buttonrect[4];
+	SDL_Rect buttonrect[5];
 	Explosion explo(explode);
 	//file
 	//fstream f;
 
-	SDL_Texture* startmenu=window.loadTextureFromText("START", 585, 200, 60, rect[0]);
-	SDL_Texture* highscoremenu=window.loadTextureFromText("HIGH SCORE", 515, 320, 60, rect[1]);
-	SDL_Texture* about=window.loadTextureFromText("ABOUT", 575, 440, 60, rect[4]);
-	SDL_Texture* exit=window.loadTextureFromText("EXIT", 598, 560, 60, rect[2]);
-
+	SDL_Texture* startmenu = window.loadTextureFromText("START", 585, 200, 60);
+	SDL_Texture* highscoremenu=window.loadTextureFromText("HIGH SCORE", 515, 320, 60);
+	SDL_Texture* about=window.loadTextureFromText("ABOUT", 575, 440, 60);
+	SDL_Texture* exit=window.loadTextureFromText("EXIT", 598, 560, 60);
+	SDL_Texture* quit = window.loadTextureFromText("QUIT", 598, 560, 60);
+	SDL_Texture* continuegame = window.loadTextureFromText("CONTINUE", 598, 560, 60);
 
 	// load explosion
 	explo.loadExplosion();
@@ -174,6 +176,10 @@ int main(int argc, char* args[])
 	buttonrect[3].w = 16;
 	buttonrect[3].h = 16;
 
+	buttonrect[4].x = 0;
+	buttonrect[4].y = 0;
+	buttonrect[4].w = 345;
+	buttonrect[4].h = 76;
 	
 	//init enemy
 	for (int i = 0; i < 4; i++) {
@@ -216,10 +222,10 @@ int main(int argc, char* args[])
 		{
 
 			window.render(backgroungimage);
-			window.render(470, 215, square);
-			window.render(470, 335, square);
-			window.render(470, 455, square);
-			window.render(470, 575, square);
+			window.renderPortion(470, 215,345, 76, &buttonrect[4], square, rect[0]);
+			window.renderPortion(470, 335, 345, 76, &buttonrect[4], square, rect[1]);
+			window.renderPortion(470, 455, 345, 76, &buttonrect[4], square, rect[4]);
+			window.renderPortion(470, 575, 345, 76, &buttonrect[4], square, rect[2]);
 			window.render(585, 200, startmenu);
 			window.render(515, 320, highscoremenu);
 			window.render(575, 440, about);
@@ -229,7 +235,7 @@ int main(int argc, char* args[])
 			// sound handle
 			if (sound == true) window.renderPortion(30, 620, 75, 75, &buttonrect[0], button, rect[5]);
 			else window.renderPortion(30, 620, 75, 75, &buttonrect[1], button, rect[5]);
-			window.handleState(event, sound, rect[5]);
+			window.handleState(event, sound, rect[5], window.window);
 			if (sound == false) Mix_PauseMusic();
 			else Mix_ResumeMusic();
 
@@ -286,14 +292,14 @@ int main(int argc, char* args[])
 				// sound handle
 				if (sound == true) window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[5]);
 				else window.renderPortion(1080, 10, 75, 75, &buttonrect[1], button, rect[5]);
-				window.handleState(event, sound, rect[5]);
+				window.handleState(event, sound, rect[5], window.window);
 
 				if (sound == false) Mix_PauseMusic();
 				else Mix_ResumeMusic();
 
 				//pause button
 				window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
-				window.handleState(event, pause, rect[6]);
+				window.handleState(event, pause, rect[6], window.window);
 
 				player.move(event, player.x_pos, player.y_pos, player.gun);
 				//make bullet for player
@@ -458,9 +464,35 @@ int main(int argc, char* args[])
 			}
 			else {
 				//pause button
-				window.handleState(event, pause, rect[6]);
+				//pause button
+				window.render(menubgr);
+				window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
+				window.renderPortion(470, 350, 75, 75, &buttonrect[2], button, rect[3]);
+				window.render(470, 250, square);
+				window.render(470, 400, square);
+				window.handleState(event, pause, rect[6], window.window);
 				SDL_Delay(100);
+				window.display();
 			}
+		}
+		if (start == 4) {
+			//background
+			window.render(backgroungimage);
+
+			//text
+			SDL_Texture* introduction = window.loadTextureFromText("This game is developed by", 585, 200, 50);
+			SDL_Texture* nvh = window.loadTextureFromText("Nguyen Van Hung", 585, 200, 50);
+			SDL_Texture* nbn = window.loadTextureFromText("Nguyen Binh Nguyen", 585, 200, 50);
+			SDL_Texture* thg = window.loadTextureFromText("Ta Hoang Giang", 585, 200, 50);
+			window.render(50, 170, introduction);
+			window.render(50, 230, nvh);
+			window.render(50, 290, nbn);
+			window.render(50, 350, thg);
+			window.render(825, 605, square);
+			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
+
+			window.handleEvent(event, start, rect);
+			window.display();
 		}
 	}
 	
