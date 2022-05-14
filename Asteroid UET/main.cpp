@@ -108,7 +108,7 @@ int main(int argc, char* args[])
 
 	//timer
 	Timer timer;
-
+	Uint32  lasttime = 0, currentTime;
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
 	SDL_Texture* pilot = window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
@@ -122,10 +122,11 @@ int main(int argc, char* args[])
 	SDL_Texture* button = window.loadTexture("D:/Asteroid UET/image/button.png");
 	SDL_Texture* bar = window.loadTexture("D:/Asteroid UET/image/scorebar.png");
 	SDL_Texture* menubgr = window.loadTexture("D:/Asteroid UET/image/menubgr.png");
-
+	
 	//init object
 	player player(pilot);
 	enemy Enemy(p_enemy);
+	
 	bullet p_bull(pow, player.getX(), player.getY());
 	bullet enemy_bull(pow_enemy);
 	vector <bullet> enemy_bulls;
@@ -134,8 +135,18 @@ int main(int argc, char* args[])
 	SDL_Rect rect[7]; // buttons in the game
 	SDL_Rect buttonrect[5];
 	Explosion explo(explode);
+	
+
+	//init boss
+	SDL_Texture* boss = window.loadTexture("D:/Asteroid UET/image/boss.png");
+	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
+	bullet boss_aks(boss_bull,1100,300);
+	vector<bullet> boss_bulls;
+	int healthpoint = 20;
+	bool live = false;
+	
 	//file
-	//fstream f;
+	fstream f;
 
 	SDL_Texture* startmenu = window.loadTextureFromText("START", 585, 200, 60);
 	SDL_Texture* highscoremenu=window.loadTextureFromText("HIGH SCORE", 515, 320, 60);
@@ -200,17 +211,18 @@ int main(int argc, char* args[])
 	vector<int> x_explosion;
 	vector<int> y_explosion;
 	bool gameRunning = true;
-	/*f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
+	f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::in);
 	while (!f.eof())
 	{
 		int tmpscore;
 		f >> tmpscore;
 		score.push_back(tmpscore);
 	}
-	f.close();*/
-	
+	f.close();
+	timer.start();
 	while (gameRunning)
 	{
+		
 		// Get our controls and events
 		SDL_PollEvent(&event);
 		{
@@ -220,7 +232,7 @@ int main(int argc, char* args[])
 		window.clear();
 		{if (start == 3)
 		{
-
+			//timer.pause();
 			window.render(backgroungimage);
 			window.renderPortion(470, 215,345, 76, &buttonrect[4], square, rect[0]);
 			window.renderPortion(470, 335, 345, 76, &buttonrect[4], square, rect[1]);
@@ -244,7 +256,7 @@ int main(int argc, char* args[])
 
 		}}
 		if (start == 1) {
-			
+			//timer.pause();
 			window.clear();			
 			window.render(highscore);
 			window.render(825, 605, square);
@@ -270,7 +282,7 @@ int main(int argc, char* args[])
 					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
 
 				}
-				for (int j = score.size(); j <= 10; j++) {
+				for (int j = score.size()+1; j <= 10; j++) {
 					string tmp = to_string(0);
 					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
 				}
@@ -280,6 +292,7 @@ int main(int argc, char* args[])
 		}
 		if (start == 2)
 		{
+			//timer.pause();
 			gameRunning = false;
 			break;
 		}
@@ -337,10 +350,10 @@ int main(int argc, char* args[])
 						_enemy.y_pos = 620;
 						cout << point << endl;
 						score.push_back(point);
-						/*f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
+						f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
 						f << point << " ";
 						f.close();
-						*/
+					
 						//cout << turn;
 						point = 0;
 						turn = turn + 1;
@@ -371,7 +384,7 @@ int main(int argc, char* args[])
 
 
 				}
-
+				//enemy_bulls
 				for (int i = 0; i < enemy_bulls.size(); i++) {
 					bullet& e_bull = enemy_bulls[i];
 					e_bull.x_pos = e_bull.x_pos - 0.5;
@@ -460,6 +473,34 @@ int main(int argc, char* args[])
 						SDL_RenderPresent(window.renderer);
 					}
 				}
+				//timer.unpause();
+				//currentTime = timer.getTicks();
+				//if (currentTime % 1000 == 0) cout << currentTime;
+				//boss
+				//if (point > 0 && healthpoint > 0) live = true;
+				//if (live == true) {
+				//	{ window.render(1100, 300, boss);
+				//	if (currentTime > lasttime + 1000) {
+				//		boss_bulls.push_back(boss_aks);
+				//		cout << "con chim non";
+				//		lasttime = currentTime;
+
+				//	}
+
+				//	}
+				//	//boss bullet
+				//	for (int index = 0; index < boss_bulls.size(); index++) {
+				//		auto& boss_dan = boss_bulls[index];
+				//		window.render(boss_dan, boss_dan.x_pos, boss_dan.y_pos);
+				//		boss_dan.x_pos -= 0.2;
+				//		if (boss_dan.x_pos < 0)
+				//		{
+				//			boss_bulls.erase(boss_bulls.begin() + index);
+
+				//		}
+				//	}
+				//}
+
 				window.display();
 			}
 			else {
@@ -472,13 +513,14 @@ int main(int argc, char* args[])
 				window.render(470, 400, square);
 				window.handleState(event, pause, rect[6], window.window);
 				SDL_Delay(100);
+				//timer.pause();
 				window.display();
 			}
 		}
 		if (start == 4) {
 			//background
 			window.render(backgroungimage);
-
+			//timer.pause();
 			//text
 			SDL_Texture* introduction = window.loadTextureFromText("This game is developed by", 585, 200, 50);
 			SDL_Texture* nvh = window.loadTextureFromText("Nguyen Van Hung", 585, 200, 50);
