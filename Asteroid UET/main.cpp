@@ -16,6 +16,7 @@ using namespace std;
 
 const int EXPLOSION_FRAME = 6;
 
+
 bool checkCollision(SDL_Rect a, SDL_Rect b)
 {
 	//The sides of the rectangles
@@ -108,6 +109,9 @@ int main(int argc, char* args[])
 
 	//timer
 	Timer timer;
+	const int FPS=1000;
+	const int frameDelay = 1000 / FPS;
+	int frametime;
 	Uint32  lasttime = 0, currentTime;
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
@@ -139,6 +143,9 @@ int main(int argc, char* args[])
 
 	//init boss
 	SDL_Texture* boss = window.loadTexture("D:/Asteroid UET/image/boss.png");
+	enemy Boss(boss);
+	
+
 	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
 	bullet boss_aks(boss_bull,1100,300);
 	vector<bullet> boss_bulls;
@@ -231,7 +238,7 @@ int main(int argc, char* args[])
 		}
 		window.clear();
 		{if (start == 3)
-		{
+		{//menu
 			//timer.pause();
 			window.render(backgroungimage);
 			window.renderPortion(470, 215,345, 76, &buttonrect[4], square, rect[0]);
@@ -256,6 +263,7 @@ int main(int argc, char* args[])
 
 		}}
 		if (start == 1) {
+			//highscore
 			//timer.pause();
 			window.clear();			
 			window.render(highscore);
@@ -299,7 +307,7 @@ int main(int argc, char* args[])
 		if (start == 0) {
 			if (pause == false) {
 				window.render(background);
-
+				currentTime = timer.getTicks();
 				window.render(0, 0, bar);
 
 				// sound handle
@@ -362,7 +370,7 @@ int main(int argc, char* args[])
 					}
 					if (_enemy.x_pos < 0) {
 						_enemy.x_pos = 1280;
-						_enemy.y_pos = rand() % 672 + 100;
+						_enemy.y_pos = rand() % 672 +50;
 
 						_enemy.mCollider.x = _enemy.x_pos;
 						_enemy.mCollider.y = _enemy.y_pos;
@@ -457,11 +465,77 @@ int main(int argc, char* args[])
 							_enemy.y_pos = rand() % 672 + 100;
 							point++;
 						}
+						
+						if (checkCollision(bull.mCollider, Boss.mCollider)) {
+							//frame.push_back(0);
+							bullet_erased = true;
+							healthpoint = healthpoint-1;
+							cout << "SOS1";
+						}
 					}
 
-					if ((bull.x_pos > 1280) && (bullet_erased = false)) bullet_list.erase(bullet_list.begin() + i);
+					if ((bull.x_pos > 1280) || (bullet_erased == true)) bullet_list.erase(bullet_list.begin() + i);
 
 				}
+			
+				//timer.unpause();
+				
+				//if (currentTime % 1000 == 0) cout << currentTime;
+				//boss
+				if (point > 0 && healthpoint > 0) live = true;
+				else live = false;
+				if (live == true) {
+					{ window.render(1100, 300, boss);
+					Boss.mCollider.x = 1100;
+					Boss.mCollider.y = 300;
+					if (currentTime > lasttime + 3000) {
+						boss_aks.caculate(player.x_pos, player.y_pos, boss_aks.x_pos, boss_aks.y_pos);
+						boss_aks.dicrect_x = boss_aks.v1;
+						boss_aks.dicrect_y = boss_aks.v2;
+						boss_bulls.push_back(boss_aks);
+						lasttime = currentTime;
+						
+					}
+
+					}
+					//boss bullet
+					for (int index = 0; index < boss_bulls.size(); index++) {
+						auto& boss_dan = boss_bulls[index];
+						window.render(boss_dan, boss_dan.x_pos, boss_dan.y_pos);
+						
+						
+						
+						boss_dan.x_pos += boss_dan.dicrect_x*0.5;
+						boss_dan.y_pos += boss_dan.dicrect_y*0.5;
+						if (boss_dan.x_pos < 0)
+						{
+							boss_bulls.erase(boss_bulls.begin() + index);
+
+						}
+						boss_dan.mCollider.x = boss_dan.x_pos;
+						boss_dan.mCollider.y = boss_dan.y_pos;
+						if (checkCollision(boss_dan.mCollider, player.mCollider)) {
+							while (frameend < 180) {
+								frameend++;
+								SDL_Rect* currentClip = &explo.explode[frameend / 30];
+								window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
+								SDL_RenderPresent(window.renderer);
+							}
+							cout << "SOS2";
+							start = 3; window.clear();
+							player.mCollider.x = 0;
+							player.mCollider.y = 0;
+							player.x_pos = 0;
+							player.y_pos = 0;
+							score.push_back(point);
+							point = 0;
+							boss_bulls.erase(boss_bulls.begin() + index);
+							break;
+						}
+						
+					}
+				}
+				
 				window.render(50, 0, P);
 				window.render(250, 0, Point[point]);
 				if (frame.size() >= 1) {
@@ -473,34 +547,10 @@ int main(int argc, char* args[])
 						SDL_RenderPresent(window.renderer);
 					}
 				}
-				//timer.unpause();
-				//currentTime = timer.getTicks();
-				//if (currentTime % 1000 == 0) cout << currentTime;
-				//boss
-				//if (point > 0 && healthpoint > 0) live = true;
-				//if (live == true) {
-				//	{ window.render(1100, 300, boss);
-				//	if (currentTime > lasttime + 1000) {
-				//		boss_bulls.push_back(boss_aks);
-				//		cout << "con chim non";
-				//		lasttime = currentTime;
-
-				//	}
-
-				//	}
-				//	//boss bullet
-				//	for (int index = 0; index < boss_bulls.size(); index++) {
-				//		auto& boss_dan = boss_bulls[index];
-				//		window.render(boss_dan, boss_dan.x_pos, boss_dan.y_pos);
-				//		boss_dan.x_pos -= 0.2;
-				//		if (boss_dan.x_pos < 0)
-				//		{
-				//			boss_bulls.erase(boss_bulls.begin() + index);
-
-				//		}
-				//	}
-				//}
-
+				frametime = timer.getTicks() - currentTime;
+				if (frameDelay > frametime) {
+					SDL_Delay(frameDelay - frametime);
+				}
 				window.display();
 			}
 			else {
