@@ -323,7 +323,7 @@ int main(int argc, char* args[])
 				for (int j = 1; j <= 10; j++)
 				{
 					string tmp = "TOP  " + to_string(j);
-					window.rendertext(tmp.c_str(), 45, 100, 150 + 40 * j);
+					window.rendertext(tmp.c_str(), 45, 500, 100 + 40 * j);
 
 				}
 				sort(score.begin(), score.end(), greater<int>());
@@ -331,19 +331,19 @@ int main(int argc, char* args[])
 					for (int j = 1; j <= 10; j++)
 					{
 						string tmp = to_string(score[j - 1]);
-						window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+						window.rendertext(tmp.c_str(), 45, 720, 100 + 40 * j);
 
 					}
 				else {
 					for (int j = 1; j <= score.size(); j++)
 					{
 						string tmp = to_string(score[j - 1]);
-						window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+						window.rendertext(tmp.c_str(), 45, 720, 100 + 40 * j);
 
 					}
 					for (int j = score.size() + 1; j <= 10; j++) {
 						string tmp = to_string(0);
-						window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+						window.rendertext(tmp.c_str(), 45, 720, 100 + 40 * j);
 					}
 				}
 				window.handleEvent(event, start, rect, pause);
@@ -509,7 +509,7 @@ int main(int argc, char* args[])
 					timer.unpause();
 
 					//if (currentTime % 1000 == 0) cout << currentTime;
-					if (point > 20 && healthpoint > 0) live = true;
+					if (point > 15 && healthpoint > 0) live = true;
 					else live = false;
 					if (live == true) {
 						{ window.render(1100, 300, boss);
