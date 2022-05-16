@@ -158,7 +158,7 @@ void RenderWindow::rendertext(const char* string, int size,int x,int y, SDL_Rect
 }
 void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 	
-	gFont = TTF_OpenFont("D:/Asteroid UET/font/Koulen-Regular.ttf", size);
+	
 	if (gFont == NULL)
 	{
 		std::cout << "Failed to load lazy font! SDL_ttf Error: ", TTF_GetError();
@@ -194,8 +194,9 @@ void RenderWindow::rendertext(const char* string, int size, int x, int y) {
 			SDL_FreeSurface(textSurface);
 
 			SDL_RenderCopy(renderer, Texture, &src, &dst);
+			
 			SDL_DestroyTexture(Texture);
-			Texture = NULL;
+			
 		}
 
 

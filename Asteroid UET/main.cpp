@@ -230,7 +230,7 @@ int main(int argc, char* args[])
 		f >> tmpscore;
 		score.push_back(tmpscore);
 	}
-	
+	f.close();
 	//timer.start();
 	while (gameRunning)
 	{
@@ -250,7 +250,7 @@ int main(int argc, char* args[])
 				player.mCollider.y = 0;
 				player.x_pos = 0;
 				player.y_pos = 0;
-				score.push_back(point);
+				
 				boss_bulls.clear();
 				enemy_bulls.clear();
 				bullet_list.clear();
@@ -518,7 +518,7 @@ int main(int argc, char* args[])
 				timer.unpause();
 				
 				//if (currentTime % 1000 == 0) cout << currentTime;
-				if (point > 3 && healthpoint > 0) live = true;
+				if (point > 20 && healthpoint > 0) live = true;
 				else live = false;
 				if (live == true) {
 					{ window.render(1100, 300, boss);
@@ -596,18 +596,20 @@ int main(int argc, char* args[])
 				window.render(600, 385, quit);
 				window.handleState(event, pause, rect[6], window.window);
 				window.handleQuit(event, start, rect[3], window.window);
+				if (start == 3) reset = true;
 				SDL_Delay(100);
 				window.display();
 			}
-			else if (pause == 2) {
+		/*	else if (pause == 2) {
 				window.render(gameover);
 				window.rendertext("YOUR SCORE:", 60, 450, 230);
 				window.render(750, 230, Point[point]);
 				window.render(470, 400, square);
 				window.handleQuit(event, start, rect[3], window.window);
+				if (start == 3) reset = true;
 				SDL_Delay(100);
 				window.display();
-			}
+			}*/
 		}
 		if (start == 4) {
 			//background

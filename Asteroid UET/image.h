@@ -33,6 +33,6 @@ public:
 	SDL_Window* window; 
 	SDL_Renderer* renderer;
 	SDL_Color textColor = { 255, 255, 255 };
-	TTF_Font* gFont = NULL;
+	TTF_Font* gFont =TTF_OpenFont("D:/Asteroid UET/font/Koulen-Regular.ttf", 60);
 };
 #endif
