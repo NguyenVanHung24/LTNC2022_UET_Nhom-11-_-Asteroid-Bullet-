@@ -1,4 +1,4 @@
-
+﻿
 #include <SDL_mixer.h>
 #include <algorithm>
 #include <iostream>
@@ -142,11 +142,13 @@ int main(int argc, char* args[])
 	SDL_Rect rect[7]; // buttons in the game
 	SDL_Rect buttonrect[5];
 	Explosion explo(explode);
-	
+	bool reset = false;
 
 	//init boss
 	SDL_Texture* boss = window.loadTexture("D:/Asteroid UET/image/boss.png");
 	enemy Boss(boss);
+	Boss.mCollider.x = -1000;
+	Boss.mCollider.y = -1000;
 	
 
 	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
@@ -243,7 +245,7 @@ int main(int argc, char* args[])
 		{if (start == 3)
 		{//menu
 			//reset game 
-			if (point != 0) {
+			if (reset==true) {
 				player.mCollider.x = 0;
 				player.mCollider.y = 0;
 				player.x_pos = 0;
@@ -261,6 +263,7 @@ int main(int argc, char* args[])
 				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
 				f << point << " ";
 				point = 0;
+				reset = false;
 			}
 
 			//timer.pause();
@@ -390,6 +393,7 @@ int main(int argc, char* args[])
 						}
 						point = 0;
 						turn = turn + 1;
+						reset = true;
 						start = 3; window.clear();
 						break;
 					}
@@ -443,7 +447,7 @@ int main(int argc, char* args[])
 							SDL_RenderPresent(window.renderer);
 							SDL_Delay(1000);
 						}
-						
+						reset = true;
 						start = 3; window.clear();
 						
 						break;
@@ -478,9 +482,8 @@ int main(int argc, char* args[])
 				for (int i = 0; i < bullet_list.size(); i++) {
 					bullet& bull = bullet_list[i];
 					bull.x_pos = bull.x_pos + 8;
-					if (start == 3) bullet_list.clear();
+					
 					window.render(bull, bull.x_pos, bull.y_pos);
-
 					//set mCollider bull
 					bull.mCollider.x = bull.x_pos;
 					bull.mCollider.y = bull.y_pos;
@@ -492,21 +495,22 @@ int main(int argc, char* args[])
 							frame.push_back(0);
 							x_explosion.push_back(_enemy.mCollider.x - 50);
 							y_explosion.push_back(_enemy.mCollider.y - 75);
-							bullet_list.erase(bullet_list.begin() + i);
 							bullet_erased = true;
 							_enemy.x_pos = 1280;
 							_enemy.y_pos = rand() % 672 + 100;
 							point++;
 						}
 						
-						if (checkCollision(bull.mCollider, Boss.mCollider)) {
-							//frame.push_back(0);
-							bullet_erased = true;
-							healthpoint = healthpoint-1;
-							cout << "SOS1";
-						}
+						
 					}
+					if (checkCollision(bull.mCollider, Boss.mCollider)) {
+						//frame.push_back(0);
+						bullet_erased = true;
+						healthpoint = healthpoint - 1;
+						cout << "SOS1";
+						//if(healthpoint ==0) in vụ nổ phát ::)
 
+					}
 					if ((bull.x_pos > 1280) || (bullet_erased == true)) bullet_list.erase(bullet_list.begin() + i);
 
 				}
@@ -555,6 +559,7 @@ int main(int argc, char* args[])
 								SDL_RenderPresent(window.renderer);
 							}
 							cout << "SOS2";
+							reset = true;
 							start = 3; window.clear();
 							break;
 						}
