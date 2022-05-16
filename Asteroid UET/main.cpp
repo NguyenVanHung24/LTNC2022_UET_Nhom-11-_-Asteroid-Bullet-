@@ -108,11 +108,12 @@ int main(int argc, char* args[])
 	int pause = 0;
 
 	//timer
-	/*Timer timer;
-	const int FPS=1000;
+	Timer timer;
+	timer.start();
+	const int FPS=60;
 	const int frameDelay = 1000 / FPS;
 	int frametime;
-	Uint32  lasttime = 0, currentTime*/
+	Uint32  lasttime = 0, currentTime;
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
 	SDL_Texture* pilot = window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
@@ -144,7 +145,7 @@ int main(int argc, char* args[])
 	
 
 	//init boss
-	/*SDL_Texture* boss = window.loadTexture("D:/Asteroid UET/image/boss.png");
+	SDL_Texture* boss = window.loadTexture("D:/Asteroid UET/image/boss.png");
 	enemy Boss(boss);
 	
 
@@ -152,7 +153,7 @@ int main(int argc, char* args[])
 	bullet boss_aks(pow_enemy,1100,300);
 	vector<bullet> boss_bulls;
 	int healthpoint = 20;
-	bool live = false;*/
+	bool live = false;
 	
 	//file
 	fstream f;
@@ -205,7 +206,7 @@ int main(int argc, char* args[])
 	for (int i = 0; i < 4; i++) {
 		enemy_team.push_back(Enemy);
 		enemy_team[i].y_pos= rand()%720 + i*145;
-		if (enemy_team[i].y_pos > 720-48) enemy_team[i].y_pos *= 0.2;
+		if (enemy_team[i].y_pos > 720-48) enemy_team[i].y_pos *=8;
 		if (enemy_team[i].y_pos < 100) enemy_team[i].y_pos = 100;
 		enemy_team[i].x_pos = 1280 + i * 190;
 	}
@@ -227,7 +228,7 @@ int main(int argc, char* args[])
 		f >> tmpscore;
 		score.push_back(tmpscore);
 	}
-	f.close();
+	
 	//timer.start();
 	while (gameRunning)
 	{
@@ -241,6 +242,27 @@ int main(int argc, char* args[])
 		window.clear();
 		{if (start == 3)
 		{//menu
+			//reset game 
+			if (point != 0) {
+				player.mCollider.x = 0;
+				player.mCollider.y = 0;
+				player.x_pos = 0;
+				player.y_pos = 0;
+				score.push_back(point);
+				boss_bulls.clear();
+				enemy_bulls.clear();
+				for (auto& _enemy : enemy_team) {
+					_enemy.x_pos += 1280;
+					_enemy.mCollider.x = _enemy.x_pos;
+				}
+				healthpoint = 20;
+				score.push_back(point);
+				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
+				f << point << " ";
+				
+				point = 0;
+			}
+
 			//timer.pause();
 			window.render(backgroungimage);
 			window.renderPortion(470, 215,345, 76, &buttonrect[4], square, rect[0]);
@@ -309,7 +331,7 @@ int main(int argc, char* args[])
 		if (start == 0) {
 			if (pause == 0) {
 				window.render(background);
-				//currentTime = timer.getTicks();
+				currentTime = timer.getTicks();
 				window.render(0, 0, bar);
 
 				// sound handle
@@ -344,26 +366,15 @@ int main(int argc, char* args[])
 					_enemy.mCollider.x = _enemy.x_pos;
 					_enemy.mCollider.y = _enemy.y_pos;
 					window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
-					_enemy.x_pos -= 0.2; _enemy.mCollider.x = _enemy.x_pos;
+					_enemy.x_pos -= 5; _enemy.mCollider.x = _enemy.x_pos;
 					if (checkCollision(_enemy.mCollider, player.mCollider)) {
 						while (frameend < 180) {
 							frameend++;
-							SDL_Rect* currentClip = &explo.explode[frameend / 30];
+							SDL_Rect* currentClip = &explo.explode[frameend / 15];
 							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 							SDL_RenderPresent(window.renderer);
 						}
-						frameend = 0;
-						player.x_pos = 0;
-						player.y_pos = 0;
-						player.mCollider.x = 0;
-						player.mCollider.y = 0;
-						_enemy.x_pos = 1280;
-						_enemy.y_pos = 620;
-						cout << point << endl;
-						score.push_back(point);
-						f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
-						f << point << " ";
-						f.close();
+						
 					
 						//cout << turn;
 						for (int i = 5; i >= 0; i--) {
@@ -410,13 +421,13 @@ int main(int argc, char* args[])
 				//enemy_bulls
 				for (int i = 0; i < enemy_bulls.size(); i++) {
 					bullet& e_bull = enemy_bulls[i];
-					e_bull.x_pos = e_bull.x_pos - 0.5;
+					e_bull.x_pos = e_bull.x_pos - 8;
 					enemy_bull.mCollider.x = e_bull.x_pos;
 					enemy_bull.mCollider.y = e_bull.y_pos;
 					if (checkCollision(e_bull.mCollider, player.mCollider)) {
 						while (frameend < 180) {
 							frameend++;
-							SDL_Rect* currentClip = &explo.explode[frameend / 30];
+							SDL_Rect* currentClip = &explo.explode[frameend / 15];
 							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 							SDL_RenderPresent(window.renderer);
 						}
@@ -432,18 +443,9 @@ int main(int argc, char* args[])
 							SDL_RenderPresent(window.renderer);
 							SDL_Delay(1000);
 						}
-						score.push_back(point);
-						f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
-						f << point << " ";
-						f.close();
+						
 						start = 3; window.clear();
-						player.mCollider.x = 0;
-						player.mCollider.y = 0;
-						player.x_pos = 0;
-						player.y_pos = 0;
-						score.push_back(point);
-						point = 0;
-						enemy_bulls.erase(enemy_bulls.begin() + i);
+						
 						break;
 					}
 					window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
@@ -475,7 +477,7 @@ int main(int argc, char* args[])
 				//render bullet for player
 				for (int i = 0; i < bullet_list.size(); i++) {
 					bullet& bull = bullet_list[i];
-					bull.x_pos = bull.x_pos + 1;
+					bull.x_pos = bull.x_pos + 8;
 					if (start == 3) bullet_list.clear();
 					window.render(bull, bull.x_pos, bull.y_pos);
 
@@ -497,32 +499,33 @@ int main(int argc, char* args[])
 							point++;
 						}
 						
-						/*if (checkCollision(bull.mCollider, Boss.mCollider)) {
+						if (checkCollision(bull.mCollider, Boss.mCollider)) {
 							//frame.push_back(0);
 							bullet_erased = true;
 							healthpoint = healthpoint-1;
 							cout << "SOS1";
-						}*/
+						}
 					}
 
 					if ((bull.x_pos > 1280) && (bullet_erased == false)) bullet_list.erase(bullet_list.begin() + i);
 
 				}
 			
-				//timer.unpause();
+				timer.unpause();
 				
 				//if (currentTime % 1000 == 0) cout << currentTime;
-				/*if (point > 0 && healthpoint > 0) live = true;
+				if (healthpoint > 0 && healthpoint > 0) live = true;
 				else live = false;
 				if (live == true) {
 					{ window.render(1100, 300, boss);
 					Boss.mCollider.x = 1100;
 					Boss.mCollider.y = 300;
-					if (currentTime > lasttime + 3000) {
+					if (currentTime > lasttime + 1000) {
 						boss_aks.caculate(player.x_pos, player.y_pos, boss_aks.x_pos, boss_aks.y_pos);
 						boss_aks.dicrect_x = boss_aks.v1;
 						boss_aks.dicrect_y = boss_aks.v2;
 						boss_bulls.push_back(boss_aks);
+						cout << "SdG";
 						lasttime = currentTime;
 						
 					}
@@ -535,8 +538,8 @@ int main(int argc, char* args[])
 						
 						
 						
-						boss_dan.x_pos += boss_dan.dicrect_x*0.5;
-						boss_dan.y_pos += boss_dan.dicrect_y*0.5;
+						boss_dan.x_pos += boss_dan.dicrect_x*5;
+						boss_dan.y_pos += boss_dan.dicrect_y*5;
 						if (boss_dan.x_pos < 0)
 						{
 							boss_bulls.erase(boss_bulls.begin() + index);
@@ -547,24 +550,17 @@ int main(int argc, char* args[])
 						if (checkCollision(boss_dan.mCollider, player.mCollider)) {
 							while (frameend < 180) {
 								frameend++;
-								SDL_Rect* currentClip = &explo.explode[frameend / 30];
+								SDL_Rect* currentClip = &explo.explode[frameend / 15];
 								window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 								SDL_RenderPresent(window.renderer);
 							}
 							cout << "SOS2";
-							start = 3; window.clear();
-							player.mCollider.x = 0;
-							player.mCollider.y = 0;
-							player.x_pos = 0;
-							player.y_pos = 0;
-							score.push_back(point);
-							point = 0;
-							boss_bulls.erase(boss_bulls.begin() + index);
+							
 							break;
 						}
 						
 					}
-				}*/
+				}
 				
 				window.render(50, 0, P);
 				window.render(250, 0, Point[point]);
@@ -577,10 +573,10 @@ int main(int argc, char* args[])
 						SDL_RenderPresent(window.renderer);
 					}
 				}
-				/*frametime = timer.getTicks() - currentTime;
+				frametime = timer.getTicks() - currentTime;
 				if (frameDelay > frametime) {
 					SDL_Delay(frameDelay - frametime);
-				}*/
+				}
 				window.display();
 			}
 			else if (pause == 1) {
