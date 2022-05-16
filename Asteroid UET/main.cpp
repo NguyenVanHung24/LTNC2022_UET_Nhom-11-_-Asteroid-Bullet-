@@ -219,6 +219,8 @@ int main(int argc, char* args[])
 	int point=0;
 	int tmp = 0;
 	int frameend = 0;
+	bool dead = false;
+	int deadtime = 0;
 	vector<int> frame;
 	vector<int> x_explosion;
 	vector<int> y_explosion;
@@ -242,386 +244,362 @@ int main(int argc, char* args[])
 				gameRunning = false;
 		}
 		window.clear();
-		{if (start == 3)
-		{//menu
-			//reset game 
-			if (reset==true) {
-				player.mCollider.x = 0;
-				player.mCollider.y = 0;
-				player.x_pos = 0;
-				player.y_pos = 0;
-				
-				boss_bulls.clear();
-				enemy_bulls.clear();
-				bullet_list.clear();
-				for (auto& _enemy : enemy_team) {
-					_enemy.x_pos += 1280;
-					_enemy.mCollider.x = _enemy.x_pos;
-				}
-				healthpoint = 20;
-				score.push_back(point);
-				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
-				f << point << " ";
-				point = 0;
-				reset = false;
+		if ((timer.getTicks() > deadtime) && (dead == true)) {
+			
+			for (int i = 5; i >= 0; i--) {
+				window.render(gameover);
+				window.rendertext("YOUR SCORE:", 60, 470, 260);
+				window.rendertext("BACK TO MAIN SCREEN IN", 60, 370, 350);
+				string secondsleft = to_string(i);
+				SDL_Texture* secs = window.loadTextureFromText(secondsleft, 1150, 0, 60);
+				window.render(920, 350, secs);
+				window.render(820, 260, Point[point]);
+				SDL_RenderPresent(window.renderer);
+				SDL_Delay(1000);
 			}
-
-			//timer.pause();
-			window.render(backgroungimage);
-			window.renderPortion(470, 215,345, 76, &buttonrect[4], square, rect[0]);
-			window.renderPortion(470, 335, 345, 76, &buttonrect[4], square, rect[1]);
-			window.renderPortion(470, 455, 345, 76, &buttonrect[4], square, rect[4]);
-			window.renderPortion(470, 575, 345, 76, &buttonrect[4], square, rect[2]);
-			window.render(585, 200, startmenu);
-			window.render(515, 320, highscoremenu);
-			window.render(575, 440, about);
-			window.render(598, 560, exit);
-			window.handleEvent(event, start, rect, pause);
-
-			// sound handle
-			if (sound == 1) window.renderPortion(30, 620, 75, 75, &buttonrect[0], button, rect[5]);
-			else window.renderPortion(30, 620, 75, 75, &buttonrect[1], button, rect[5]);
-			window.handleState(event, sound, rect[5], window.window);
-			if (sound == 0) Mix_PauseMusic();
-			else Mix_ResumeMusic();
-
-
-			window.display();
-
-		}}
-		if (start == 1) {
-			//highscore
-			//timer.pause();
-			window.clear();			
-			window.render(highscore);
-			window.render(825, 605, square);
-			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
-			for (int j = 1; j <= 10; j++)
-			{
-				string tmp = "TOP  " + to_string(j);
-				window.rendertext(tmp.c_str(), 45, 100, 150 + 40 * j);
-
-			}
-			sort(score.begin(), score.end(), greater<int>());
-			if(score.size() >= 10)
-			for (int j = 1; j <= 10; j++)
-			{	
-				string tmp = to_string(score[j-1]);
-				window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
-
-			}
-			else {
-				for (int j = 1; j <=score.size(); j++)
-				{
-					string tmp = to_string(score[j - 1]);
-					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
-
-				}
-				for (int j = score.size()+1; j <= 10; j++) {
-					string tmp = to_string(0);
-					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
-				}
-			}
-			window.handleEvent(event, start, rect, pause);
-			window.display();
+			point = 0;
+			turn = turn + 1;
+			reset = true;
+			deadtime = 0;
+			dead = false;
+			start = 3; window.clear();
 		}
-		if (start == 2)
-		{
-			//timer.pause();
-			gameRunning = false;
-			break;
-		}
-		if (start == 0) {
-			if (pause == 0) {
-				window.render(background);
-				currentTime = timer.getTicks();
-				window.render(0, 0, bar);
+		else {
+			if (start == 3)
+			{//menu
+				//reset game 
+				if (reset == true) {
+
+					player.mCollider.x = 0;
+					player.mCollider.y = 0;
+					player.x_pos = 0;
+					player.y_pos = 0;
+
+					boss_bulls.clear();
+					enemy_bulls.clear();
+					bullet_list.clear();
+					for (auto& _enemy : enemy_team) {
+						_enemy.x_pos += 1280;
+						_enemy.mCollider.x = _enemy.x_pos;
+					}
+					healthpoint = 20;
+					score.push_back(point);
+					f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
+					f << point << " ";
+					point = 0;
+					reset = false;
+				}
+
+				//timer.pause();
+				window.render(backgroungimage);
+				window.renderPortion(470, 215, 345, 76, &buttonrect[4], square, rect[0]);
+				window.renderPortion(470, 335, 345, 76, &buttonrect[4], square, rect[1]);
+				window.renderPortion(470, 455, 345, 76, &buttonrect[4], square, rect[4]);
+				window.renderPortion(470, 575, 345, 76, &buttonrect[4], square, rect[2]);
+				window.render(585, 200, startmenu);
+				window.render(515, 320, highscoremenu);
+				window.render(575, 440, about);
+				window.render(598, 560, exit);
+				window.handleEvent(event, start, rect, pause);
 
 				// sound handle
-				if (sound == 1) window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[5]);
-				else window.renderPortion(1080, 10, 75, 75, &buttonrect[1], button, rect[5]);
+				if (sound == 1) window.renderPortion(30, 620, 75, 75, &buttonrect[0], button, rect[5]);
+				else window.renderPortion(30, 620, 75, 75, &buttonrect[1], button, rect[5]);
 				window.handleState(event, sound, rect[5], window.window);
-
 				if (sound == 0) Mix_PauseMusic();
 				else Mix_ResumeMusic();
 
-				//pause button
-				window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
-				window.handleState(event, pause, rect[6], window.window);
 
-				player.move(event, player.x_pos, player.y_pos, player.gun);
-				//make bullet for player
-				if (player.gun == true) {
-					//play fire sound effect
-					if (sound == 1)Mix_PlayChannel(-1, player_fire, 0);
-					p_bull.x_pos = player.x_pos + 36;
-					p_bull.y_pos = player.y_pos + 18;
-					bullet_list.push_back(p_bull);
-					player.gun = false;
+				window.display();
+
+			}
+			if (start == 1) {
+				//highscore
+				//timer.pause();
+				window.clear();
+				window.render(highscore);
+				window.render(825, 605, square);
+				window.rendertext("Turn Back", 50, 900, 600, rect[3]);
+				for (int j = 1; j <= 10; j++)
+				{
+					string tmp = "TOP  " + to_string(j);
+					window.rendertext(tmp.c_str(), 45, 100, 150 + 40 * j);
+
 				}
+				sort(score.begin(), score.end(), greater<int>());
+				if (score.size() >= 10)
+					for (int j = 1; j <= 10; j++)
+					{
+						string tmp = to_string(score[j - 1]);
+						window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
 
-
-				//render enemy team and bull
-				for (int i = 0; i < 4; i++) {
-					enemy& _enemy = enemy_team[i];
-
-					//set mCollider
-					_enemy.mCollider.x = _enemy.x_pos;
-					_enemy.mCollider.y = _enemy.y_pos;
-					window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
-					_enemy.x_pos -= 5; _enemy.mCollider.x = _enemy.x_pos;
-					if (checkCollision(_enemy.mCollider, player.mCollider)) {
-						while (frameend < 30) {
-							frameend++;
-							SDL_Rect* currentClip = &explo.explode[frameend / 5];
-							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
-							SDL_RenderPresent(window.renderer);
-						}
-						
-					
-						//cout << turn;
-						for (int i = 5; i >= 0; i--) {
-							window.render(gameover);
-							window.rendertext("YOUR SCORE:", 60, 470, 260);
-							window.rendertext("BACK TO MAIN SCREEN IN", 60, 370, 350);
-							string secondsleft = to_string(i);
-							SDL_Texture* secs = window.loadTextureFromText(secondsleft, 1150, 0, 60);
-							window.render(920, 350, secs);
-							window.render(820, 260, Point[point]);
-							SDL_RenderPresent(window.renderer);
-							SDL_Delay(1000);
-						}
-						point = 0;
-						turn = turn + 1;
-						reset = true;
-						start = 3; window.clear();
-						break;
 					}
-					if (_enemy.x_pos < 0) {
-						_enemy.x_pos = 1280;
-						_enemy.y_pos = rand() % 672;
-						if (_enemy.y_pos < 100) _enemy.y_pos += 100;
+				else {
+					for (int j = 1; j <= score.size(); j++)
+					{
+						string tmp = to_string(score[j - 1]);
+						window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
 
+					}
+					for (int j = score.size() + 1; j <= 10; j++) {
+						string tmp = to_string(0);
+						window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
+					}
+				}
+				window.handleEvent(event, start, rect, pause);
+				window.display();
+			}
+			if (start == 2)
+			{
+				//timer.pause();
+				gameRunning = false;
+				break;
+			}
+			if (start == 0) {
+				if (pause == 0) {
+					window.render(background);
+					currentTime = timer.getTicks();
+					window.render(0, 0, bar);
+
+					// sound handle
+					if (sound == 1) window.renderPortion(1080, 10, 75, 75, &buttonrect[0], button, rect[5]);
+					else window.renderPortion(1080, 10, 75, 75, &buttonrect[1], button, rect[5]);
+					window.handleState(event, sound, rect[5], window.window);
+
+					if (sound == 0) Mix_PauseMusic();
+					else Mix_ResumeMusic();
+
+					//pause button
+					window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
+					window.handleState(event, pause, rect[6], window.window);
+
+					player.move(event, player.x_pos, player.y_pos, player.gun);
+					//make bullet for player
+					if (player.gun == true) {
+						//play fire sound effect
+						if (sound == 1)Mix_PlayChannel(-1, player_fire, 0);
+						p_bull.x_pos = player.x_pos + 36;
+						p_bull.y_pos = player.y_pos + 18;
+						bullet_list.push_back(p_bull);
+						player.gun = false;
+					}
+
+
+					//render enemy team and bull
+					for (int i = 0; i < 4; i++) {
+						enemy& _enemy = enemy_team[i];
+
+						//set mCollider
 						_enemy.mCollider.x = _enemy.x_pos;
 						_enemy.mCollider.y = _enemy.y_pos;
-
-						enemy_bull.x_pos = _enemy.x_pos;
-						enemy_bull.y_pos = _enemy.y_pos;
-
-
-						enemy_bull.mCollider.x = _enemy.x_pos;
-						enemy_bull.mCollider.y = _enemy.y_pos;
-
-						if (enemy_bulls.size() > 4) continue;
-						else
-						{
-							enemy_bulls.push_back(enemy_bull);
-
-						}
-					}
-
-
-				}
-				//enemy_bulls
-				for (int i = 0; i < enemy_bulls.size(); i++) {
-					bullet& e_bull = enemy_bulls[i];
-					e_bull.x_pos = e_bull.x_pos - 8;
-					enemy_bull.mCollider.x = e_bull.x_pos;
-					enemy_bull.mCollider.y = e_bull.y_pos;
-					if (checkCollision(e_bull.mCollider, player.mCollider)) {
-						while (frameend < 30) {
-							frameend++;
-							SDL_Rect* currentClip = &explo.explode[frameend / 5];
-							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
-							SDL_RenderPresent(window.renderer);
-						}
-						frameend = 0;
-						for (int i = 5; i >= 0; i--) {
-							window.render(gameover);
-							window.rendertext("YOUR SCORE:", 60, 470, 260);
-							window.rendertext("BACK TO MAIN SCREEN IN", 60, 370, 350);
-							string secondsleft = to_string(i);
-							SDL_Texture* secs = window.loadTextureFromText(secondsleft, 1150, 0, 60);
-							window.render(920, 350, secs);
-							window.render(820, 260, Point[point]);
-							SDL_RenderPresent(window.renderer);
-							SDL_Delay(1000);
-						}
-						reset = true;
-						start = 3; window.clear();
-						
-						break;
-					}
-					window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
-
-
-					// get e_bull Collider and check player vs enemy_bull
-					e_bull.mCollider.x = e_bull.x_pos;
-					e_bull.mCollider.y = e_bull.y_pos;
-
-
-					if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
-
-				}
-
-
-				//render player
-				window.render(player, player.x_pos, player.y_pos);
-
-
-
-				//set condition position
-				{if (player.y_pos < 100) player.y_pos = 100;
-				if (player.y_pos > 720 - 48) player.y_pos = 720 - 48;
-				if (player.x_pos < 0) player.x_pos = 0;
-				if (player.x_pos > 1280 - 46) player.x_pos = 1280 - 46;
-
-				}
-
-				//render bullet for player
-				for (int i = 0; i < bullet_list.size(); i++) {
-					bullet& bull = bullet_list[i];
-					bull.x_pos = bull.x_pos + 8;
-					
-					window.render(bull, bull.x_pos, bull.y_pos);
-					//set mCollider bull
-					bull.mCollider.x = bull.x_pos;
-					bull.mCollider.y = bull.y_pos;
-					// 
-					bool bullet_erased = false;
-					for (auto& _enemy : enemy_team)
-					{
-						if (checkCollision(bull.mCollider, _enemy.mCollider)) {
+						window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
+						_enemy.x_pos -= 5; _enemy.mCollider.x = _enemy.x_pos;
+						if (checkCollision(_enemy.mCollider, player.mCollider)) {
 							frame.push_back(0);
 							x_explosion.push_back(_enemy.mCollider.x - 50);
 							y_explosion.push_back(_enemy.mCollider.y - 75);
-							bullet_erased = true;
+							dead = true;
 							_enemy.x_pos = 1280;
-							_enemy.y_pos = rand() % 672 + 100;
-							point++;
+							_enemy.y_pos = rand() % 672;
+							deadtime = currentTime + 500;
 						}
-						
-						
-					}
-					if (checkCollision(bull.mCollider, Boss.mCollider)) {
-						//frame.push_back(0);
-						bullet_erased = true;
-						healthpoint = healthpoint - 1;
-						cout << "SOS1";
-						//if(healthpoint ==0) in vụ nổ phát ::)
+						if (_enemy.x_pos < 0) {
+							_enemy.x_pos = 1280;
+							_enemy.y_pos = rand() % 672;
+							if (_enemy.y_pos < 100) _enemy.y_pos += 100;
 
-					}
-					if ((bull.x_pos > 1280) || (bullet_erased == true)) bullet_list.erase(bullet_list.begin() + i);
+							_enemy.mCollider.x = _enemy.x_pos;
+							_enemy.mCollider.y = _enemy.y_pos;
 
-				}
-			
-				timer.unpause();
-				
-				//if (currentTime % 1000 == 0) cout << currentTime;
-				if (point > 20 && healthpoint > 0) live = true;
-				else live = false;
-				if (live == true) {
-					{ window.render(1100, 300, boss);
-					Boss.mCollider.x = 1100;
-					Boss.mCollider.y = 300;
-					if (currentTime > lasttime + 3000) {
-						boss_aks.caculate(player.x_pos, player.y_pos, boss_aks.x_pos, boss_aks.y_pos);
-						boss_aks.dicrect_x = boss_aks.v1;
-						boss_aks.dicrect_y = boss_aks.v2;
-						boss_bulls.push_back(boss_aks);
-						
-						lasttime = currentTime;
-						
-					}
+							enemy_bull.x_pos = _enemy.x_pos;
+							enemy_bull.y_pos = _enemy.y_pos;
 
-					}
-					//boss bullet
-					for (int index = 0; index < boss_bulls.size(); index++) {
-						auto& boss_dan = boss_bulls[index];
-						window.render(boss_dan, boss_dan.x_pos, boss_dan.y_pos);
-						
-						
-						
-						boss_dan.x_pos += boss_dan.dicrect_x*5;
-						boss_dan.y_pos += boss_dan.dicrect_y*5;
-						if (boss_dan.x_pos < 0)
-						{
-							boss_bulls.erase(boss_bulls.begin() + index);
 
-						}
-						boss_dan.mCollider.x = boss_dan.x_pos;
-						boss_dan.mCollider.y = boss_dan.y_pos;
-						if (checkCollision(boss_dan.mCollider, player.mCollider)) {
-							while (frameend < 30) {
-								frameend++;
-								SDL_Rect* currentClip = &explo.explode[frameend / 5];
-								window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
-								SDL_RenderPresent(window.renderer);
+							enemy_bull.mCollider.x = _enemy.x_pos;
+							enemy_bull.mCollider.y = _enemy.y_pos;
+
+							if (enemy_bulls.size() > 4) continue;
+							else
+							{
+								enemy_bulls.push_back(enemy_bull);
+
 							}
-							cout << "SOS2";
-							reset = true;
-							start = 3; window.clear();
-							break;
 						}
-						
-					}
-				}
-				
-				window.render(50, 0, P);
-				window.render(250, 0, Point[point]);
-				if (frame.size() >= 1) {
-					if (frame[frame.size() - 1] < 30) {
-						frame[frame.size() - 1]++;
-						SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 5];
-						window.renderExplosion(x_explosion[frame.size() - 1], y_explosion[frame.size() - 1], currentClip, explode);
-						if (sound == 1)Mix_PlayChannel(-1, enemy_die, 0);
-						SDL_RenderPresent(window.renderer);
-					}
-				}
-				frametime = timer.getTicks() - currentTime;
-				if (frameDelay > frametime) {
-					SDL_Delay(frameDelay - frametime);
-				}
-				window.display();
-			}
-			else if (pause == 1) {
-				//pause button
-				//pause button
-				window.render(menubgr);
-				window.renderPortion(470, 250, 345, 76, &buttonrect[5], square, rect[6]);
-				window.renderPortion(470, 400, 345, 76, &buttonrect[5], button, rect[3]);
-				window.render(470, 250, square);
-				window.render(470, 400, square);
-				window.render(540, 235, continuegame);
-				window.render(600, 385, quit);
-				window.handleState(event, pause, rect[6], window.window);
-				window.handleQuit(event, start, rect[3], window.window);
-				if (start == 3) reset = true;
-				SDL_Delay(100);
-				window.display();
-			}
-		/*	else if (pause == 2) {
-				window.render(gameover);
-				window.rendertext("YOUR SCORE:", 60, 450, 230);
-				window.render(750, 230, Point[point]);
-				window.render(470, 400, square);
-				window.handleQuit(event, start, rect[3], window.window);
-				if (start == 3) reset = true;
-				SDL_Delay(100);
-				window.display();
-			}*/
-		}
-		if (start == 4) {
-			//background
-			window.render(backgroungimage);
-			//timer.pause();
-			//text
-			window.render(335, 180, aboutscreen);
-			window.render(825, 605, square);
-			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
 
-			window.handleEvent(event, start, rect, pause);
-			window.display();
+
+					}
+					//enemy_bulls
+					for (int i = 0; i < enemy_bulls.size(); i++) {
+						bullet& e_bull = enemy_bulls[i];
+						e_bull.x_pos = e_bull.x_pos - 8;
+						enemy_bull.mCollider.x = e_bull.x_pos;
+						enemy_bull.mCollider.y = e_bull.y_pos;
+						if (checkCollision(e_bull.mCollider, player.mCollider)) {
+							frame.push_back(0);
+							x_explosion.push_back(e_bull.mCollider.x - 50);
+							y_explosion.push_back(e_bull.mCollider.y - 75);
+							dead = true;
+							enemy_bulls.erase(enemy_bulls.begin() + i);
+							deadtime = currentTime + 500;
+						}
+						window.render(e_bull, e_bull.x_pos, e_bull.y_pos);
+
+
+						// get e_bull Collider and check player vs enemy_bull
+						e_bull.mCollider.x = e_bull.x_pos;
+						e_bull.mCollider.y = e_bull.y_pos;
+
+
+						if (e_bull.x_pos < 0) enemy_bulls.erase(enemy_bulls.begin() + i);
+
+					}
+
+
+					//render player
+					if (!dead) window.render(player, player.x_pos, player.y_pos);
+
+
+
+					//set condition position
+					{if (player.y_pos < 100) player.y_pos = 100;
+					if (player.y_pos > 720 - 48) player.y_pos = 720 - 48;
+					if (player.x_pos < 0) player.x_pos = 0;
+					if (player.x_pos > 1280 - 46) player.x_pos = 1280 - 46;
+
+					}
+
+					//render bullet for player
+					for (int i = 0; i < bullet_list.size(); i++) {
+						bullet& bull = bullet_list[i];
+						bull.x_pos = bull.x_pos + 8;
+
+						window.render(bull, bull.x_pos, bull.y_pos);
+						//set mCollider bull
+						bull.mCollider.x = bull.x_pos;
+						bull.mCollider.y = bull.y_pos;
+						// 
+						bool bullet_erased = false;
+						for (auto& _enemy : enemy_team)
+						{
+							if (checkCollision(bull.mCollider, _enemy.mCollider)) {
+								frame.push_back(0);
+								x_explosion.push_back(_enemy.mCollider.x - 50);
+								y_explosion.push_back(_enemy.mCollider.y - 75);
+								bullet_erased = true;
+								_enemy.x_pos = 1280;
+								_enemy.y_pos = rand() % 672 + 100;
+								point++;
+							}
+
+
+						}
+						if (checkCollision(bull.mCollider, Boss.mCollider)) {
+							//frame.push_back(0);
+
+							bullet_erased = true;
+							healthpoint = healthpoint - 1;
+							cout << "SOS1";
+							//if(healthpoint ==0) in vụ nổ phát ::)
+
+						}
+						if ((bull.x_pos > 1280) || (bullet_erased == true)) bullet_list.erase(bullet_list.begin() + i);
+
+					}
+
+					timer.unpause();
+
+					//if (currentTime % 1000 == 0) cout << currentTime;
+					if (point > 20 && healthpoint > 0) live = true;
+					else live = false;
+					if (live == true) {
+						{ window.render(1100, 300, boss);
+						Boss.mCollider.x = 1100;
+						Boss.mCollider.y = 300;
+						if (currentTime > lasttime + 3000) {
+							boss_aks.caculate(player.x_pos, player.y_pos, boss_aks.x_pos, boss_aks.y_pos);
+							boss_aks.dicrect_x = boss_aks.v1;
+							boss_aks.dicrect_y = boss_aks.v2;
+							boss_bulls.push_back(boss_aks);
+
+							lasttime = currentTime;
+
+						}
+
+						}
+						//boss bullet
+						for (int index = 0; index < boss_bulls.size(); index++) {
+							auto& boss_dan = boss_bulls[index];
+							window.render(boss_dan, boss_dan.x_pos, boss_dan.y_pos);
+
+
+
+							boss_dan.x_pos += boss_dan.dicrect_x * 5;
+							boss_dan.y_pos += boss_dan.dicrect_y * 5;
+							if (boss_dan.x_pos < 0)
+							{
+								boss_bulls.erase(boss_bulls.begin() + index);
+
+							}
+							boss_dan.mCollider.x = boss_dan.x_pos;
+							boss_dan.mCollider.y = boss_dan.y_pos;
+							if (checkCollision(boss_dan.mCollider, player.mCollider)) {
+								frame.push_back(0);
+								x_explosion.push_back(boss_dan.mCollider.x - 50);
+								y_explosion.push_back(boss_dan.mCollider.y - 75);
+								dead = true;
+								boss_bulls.erase(boss_bulls.begin() + index);
+								deadtime = currentTime + 500;
+							}
+
+						}
+					}
+
+					window.render(50, 0, P);
+					window.render(250, 0, Point[point]);
+					if (frame.size() >= 1) {
+						if (frame[frame.size() - 1] < 30) {
+							frame[frame.size() - 1]++;
+							SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 5];
+							window.renderExplosion(x_explosion[frame.size() - 1], y_explosion[frame.size() - 1], currentClip, explode);
+							if (sound == 1)Mix_PlayChannel(-1, enemy_die, 0);
+							SDL_RenderPresent(window.renderer);
+						}
+					}
+					frametime = timer.getTicks() - currentTime;
+					if (frameDelay > frametime) {
+						SDL_Delay(frameDelay - frametime);
+					}
+					window.display();
+				}
+				else if (pause == 1) {
+					//pause button
+					//pause button
+					window.render(menubgr);
+					window.renderPortion(470, 250, 345, 76, &buttonrect[5], square, rect[6]);
+					window.renderPortion(470, 400, 345, 76, &buttonrect[5], button, rect[3]);
+					window.render(470, 250, square);
+					window.render(470, 400, square);
+					window.render(540, 235, continuegame);
+					window.render(600, 385, quit);
+					window.handleState(event, pause, rect[6], window.window);
+					window.handleQuit(event, start, rect[3], window.window);
+					if (start == 3) reset = true;
+					SDL_Delay(100);
+					window.display();
+				}
+			}
+			if (start == 4) {
+				//background
+				window.render(backgroungimage);
+				//timer.pause();
+				//text
+				window.render(335, 180, aboutscreen);
+				window.render(825, 605, square);
+				window.rendertext("Turn Back", 50, 900, 600, rect[3]);
+
+				window.handleEvent(event, start, rect, pause);
+				window.display();
+			}
 		}
 	}
 	
