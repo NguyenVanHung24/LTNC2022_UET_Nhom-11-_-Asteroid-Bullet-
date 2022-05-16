@@ -125,7 +125,8 @@ int main(int argc, char* args[])
 	SDL_Texture* square = window.loadTexture("D:/Asteroid UET/image/square.png");
 	SDL_Texture* button = window.loadTexture("D:/Asteroid UET/image/button.png");
 	SDL_Texture* bar = window.loadTexture("D:/Asteroid UET/image/scorebar.png");
-	SDL_Texture* menubgr = window.loadTexture("D:/Asteroid UET/image/menubgr.png");
+	SDL_Texture* menubgr = window.loadTexture("D:/Asteroid UET/image/akabgr.png");
+	SDL_Texture* aboutscreen = window.loadTexture("D:/Asteroid UET/image/aboutscreen.png");
 	
 	//init object
 	player player(pilot);
@@ -147,7 +148,7 @@ int main(int argc, char* args[])
 	
 
 	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
-	bullet boss_aks(boss_bull,1100,300);
+	bullet boss_aks(pow_enemy,1100,300);
 	vector<bullet> boss_bulls;
 	int healthpoint = 20;
 	bool live = false;
@@ -230,7 +231,7 @@ int main(int argc, char* args[])
 	while (gameRunning)
 	{
 		
-		// Get our controls and events
+		//pGet our controls and events
 		SDL_PollEvent(&event);
 		{
 			if (event.type == SDL_QUIT)
@@ -249,7 +250,7 @@ int main(int argc, char* args[])
 			window.render(515, 320, highscoremenu);
 			window.render(575, 440, about);
 			window.render(598, 560, exit);
-			window.handleEvent(event, start, rect);
+			window.handleEvent(event, start, rect, pause);
 
 			// sound handle
 			if (sound == true) window.renderPortion(30, 620, 75, 75, &buttonrect[0], button, rect[5]);
@@ -295,7 +296,7 @@ int main(int argc, char* args[])
 					window.rendertext(tmp.c_str(), 45, 720, 150 + 40 * j);
 				}
 			}
-			window.handleEvent(event, start, rect);
+			window.handleEvent(event, start, rect, pause);
 			window.display();
 		}
 		if (start == 2)
@@ -481,7 +482,6 @@ int main(int argc, char* args[])
 				//timer.unpause();
 				
 				//if (currentTime % 1000 == 0) cout << currentTime;
-				//boss
 				if (point > 0 && healthpoint > 0) live = true;
 				else live = false;
 				if (live == true) {
@@ -557,13 +557,15 @@ int main(int argc, char* args[])
 				//pause button
 				//pause button
 				window.render(menubgr);
-				window.renderPortion(1180, 10, 75, 75, &buttonrect[2], button, rect[6]);
-				window.renderPortion(470, 350, 75, 75, &buttonrect[2], button, rect[3]);
+				window.renderPortion(470, 250, 345, 76, &buttonrect[5], square, rect[6]);
+				window.renderPortion(470, 400, 345, 76, &buttonrect[5], button, rect[3]);
 				window.render(470, 250, square);
 				window.render(470, 400, square);
+				window.render(540, 235, continuegame);
+				window.render(600, 385, quit);
 				window.handleState(event, pause, rect[6], window.window);
+				window.handleQuit(event, start, rect[3], window.window);
 				SDL_Delay(100);
-				//timer.pause();
 				window.display();
 			}
 		}
@@ -572,18 +574,11 @@ int main(int argc, char* args[])
 			window.render(backgroungimage);
 			//timer.pause();
 			//text
-			SDL_Texture* introduction = window.loadTextureFromText("This game is developed by", 585, 200, 50);
-			SDL_Texture* nvh = window.loadTextureFromText("Nguyen Van Hung", 585, 200, 50);
-			SDL_Texture* nbn = window.loadTextureFromText("Nguyen Binh Nguyen", 585, 200, 50);
-			SDL_Texture* thg = window.loadTextureFromText("Ta Hoang Giang", 585, 200, 50);
-			window.render(50, 170, introduction);
-			window.render(50, 230, nvh);
-			window.render(50, 290, nbn);
-			window.render(50, 350, thg);
+			window.render(335, 180, aboutscreen);
 			window.render(825, 605, square);
 			window.rendertext("Turn Back", 50, 900, 600, rect[3]);
 
-			window.handleEvent(event, start, rect);
+			window.handleEvent(event, start, rect, pause);
 			window.display();
 		}
 	}

@@ -239,10 +239,10 @@ void RenderWindow::changeColor(Uint8 x,Uint8 y,Uint8 z) {
 	textColor = { x,y,z };
 };
 
-void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
+void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[], bool& pause) {
 	if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
 		SDL_GetMouseState(&MouseX, &MouseY);
-		
+
 	}
 	for (int i = 0; i < 5; i++) {
 		if (CheckInside(rect[i], MouseX, MouseY))
@@ -256,6 +256,7 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					start = 0;
+					pause = false;
 					break;
 				case SDL_MOUSEBUTTONUP:
 					changeColor(255, 255, 255);
@@ -322,9 +323,10 @@ void RenderWindow::handleEvent(SDL_Event event, int& start, SDL_Rect rect[]) {
 				break;
 			}
 
-		
+
 	}
 }
+
 
 void RenderWindow::handleState(SDL_Event event, bool& state, SDL_Rect rect, SDL_Window* window) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
@@ -341,6 +343,18 @@ void RenderWindow::handleState(SDL_Event event, bool& state, SDL_Rect rect, SDL_
 		}
 	}
 }
+
+void RenderWindow::handleQuit(SDL_Event event, int& start, SDL_Rect rect, SDL_Window* window) {
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		SDL_GetMouseState(&MouseX, &MouseY);
+	}
+	if (CheckInside(rect, MouseX, MouseY)) {
+		if (event.type == SDL_MOUSEBUTTONUP) {
+			start = 3;
+		}
+	}
+}
+
 
 void RenderWindow::display()
 {
