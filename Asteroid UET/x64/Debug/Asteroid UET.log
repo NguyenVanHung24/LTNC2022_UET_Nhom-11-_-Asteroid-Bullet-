@@ -1,7 +1,7 @@
 ﻿  main.cpp
 D:\Asteroid UET\Asteroid UET\main.cpp(208,35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(211,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Asteroid UET\Asteroid UET\main.cpp(256,33): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(257,33): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(317,5): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(366,33): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(367,33): warning C4244: '=': conversion from 'float' to 'int', possible loss of data

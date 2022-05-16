@@ -150,7 +150,7 @@ int main(int argc, char* args[])
 	
 
 	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
-	bullet boss_aks(pow_enemy,1100,300);
+	bullet boss_aks(boss_bull,1100,300);
 	vector<bullet> boss_bulls;
 	int healthpoint = 20;
 	bool live = false;
@@ -251,6 +251,7 @@ int main(int argc, char* args[])
 				score.push_back(point);
 				boss_bulls.clear();
 				enemy_bulls.clear();
+				bullet_list.clear();
 				for (auto& _enemy : enemy_team) {
 					_enemy.x_pos += 1280;
 					_enemy.mCollider.x = _enemy.x_pos;
@@ -259,7 +260,6 @@ int main(int argc, char* args[])
 				score.push_back(point);
 				f.open("D:/Asteroid UET/Asteroid UET/highscore.txt", ios::app);
 				f << point << " ";
-				
 				point = 0;
 			}
 
@@ -368,9 +368,9 @@ int main(int argc, char* args[])
 					window.render(_enemy, _enemy.x_pos, _enemy.y_pos);
 					_enemy.x_pos -= 5; _enemy.mCollider.x = _enemy.x_pos;
 					if (checkCollision(_enemy.mCollider, player.mCollider)) {
-						while (frameend < 180) {
+						while (frameend < 30) {
 							frameend++;
-							SDL_Rect* currentClip = &explo.explode[frameend / 15];
+							SDL_Rect* currentClip = &explo.explode[frameend / 5];
 							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 							SDL_RenderPresent(window.renderer);
 						}
@@ -425,9 +425,9 @@ int main(int argc, char* args[])
 					enemy_bull.mCollider.x = e_bull.x_pos;
 					enemy_bull.mCollider.y = e_bull.y_pos;
 					if (checkCollision(e_bull.mCollider, player.mCollider)) {
-						while (frameend < 180) {
+						while (frameend < 30) {
 							frameend++;
-							SDL_Rect* currentClip = &explo.explode[frameend / 15];
+							SDL_Rect* currentClip = &explo.explode[frameend / 5];
 							window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 							SDL_RenderPresent(window.renderer);
 						}
@@ -507,25 +507,25 @@ int main(int argc, char* args[])
 						}
 					}
 
-					if ((bull.x_pos > 1280) && (bullet_erased == false)) bullet_list.erase(bullet_list.begin() + i);
+					if ((bull.x_pos > 1280) || (bullet_erased == true)) bullet_list.erase(bullet_list.begin() + i);
 
 				}
 			
 				timer.unpause();
 				
 				//if (currentTime % 1000 == 0) cout << currentTime;
-				if (healthpoint > 0 && healthpoint > 0) live = true;
+				if (point > 3 && healthpoint > 0) live = true;
 				else live = false;
 				if (live == true) {
 					{ window.render(1100, 300, boss);
 					Boss.mCollider.x = 1100;
 					Boss.mCollider.y = 300;
-					if (currentTime > lasttime + 1000) {
+					if (currentTime > lasttime + 3000) {
 						boss_aks.caculate(player.x_pos, player.y_pos, boss_aks.x_pos, boss_aks.y_pos);
 						boss_aks.dicrect_x = boss_aks.v1;
 						boss_aks.dicrect_y = boss_aks.v2;
 						boss_bulls.push_back(boss_aks);
-						cout << "SdG";
+						
 						lasttime = currentTime;
 						
 					}
@@ -548,14 +548,14 @@ int main(int argc, char* args[])
 						boss_dan.mCollider.x = boss_dan.x_pos;
 						boss_dan.mCollider.y = boss_dan.y_pos;
 						if (checkCollision(boss_dan.mCollider, player.mCollider)) {
-							while (frameend < 180) {
+							while (frameend < 30) {
 								frameend++;
-								SDL_Rect* currentClip = &explo.explode[frameend / 15];
+								SDL_Rect* currentClip = &explo.explode[frameend / 5];
 								window.renderExplosion(player.x_pos - 50, player.y_pos - 75, currentClip, explode);
 								SDL_RenderPresent(window.renderer);
 							}
 							cout << "SOS2";
-							
+							start = 3; window.clear();
 							break;
 						}
 						
@@ -565,9 +565,9 @@ int main(int argc, char* args[])
 				window.render(50, 0, P);
 				window.render(250, 0, Point[point]);
 				if (frame.size() >= 1) {
-					if (frame[frame.size() - 1] < 180) {
+					if (frame[frame.size() - 1] < 30) {
 						frame[frame.size() - 1]++;
-						SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 30];
+						SDL_Rect* currentClip = &explo.explode[frame[frame.size() - 1] / 5];
 						window.renderExplosion(x_explosion[frame.size() - 1], y_explosion[frame.size() - 1], currentClip, explode);
 						if (sound == 1)Mix_PlayChannel(-1, enemy_die, 0);
 						SDL_RenderPresent(window.renderer);
@@ -620,7 +620,7 @@ int main(int argc, char* args[])
 	
 	
 
-	
+	f.close();
 	window.cleanUp();
 	SDL_Quit();
 
