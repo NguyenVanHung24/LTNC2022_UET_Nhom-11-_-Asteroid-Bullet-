@@ -116,7 +116,7 @@ int main(int argc, char* args[])
 	Uint32  lasttime = 0, currentTime;
 	//get texture
 	SDL_Texture* background = window.loadTexture("D:/Asteroid UET/image/aka.png");
-	SDL_Texture* pilot = window.loadTexture("D:/Asteroid UET/image/player-Copy.png");
+	SDL_Texture* pilot = window.loadTexture("D:/Asteroid UET/image/newplayer.png");
 	SDL_Texture* pow = window.loadTexture("D:/Asteroid UET/image/playerBullet.png");
 	SDL_Texture* p_enemy = window.loadTexture("D:/Asteroid UET/image/enemy.png");
 	SDL_Texture* pow_enemy = window.loadTexture("D:/Asteroid UET/image/enemyBullet.png");
@@ -261,7 +261,6 @@ int main(int argc, char* args[])
 				SDL_RenderPresent(window.renderer);
 				SDL_Delay(1000);
 			}
-			point = 0;
 			turn = turn + 1;
 			reset = true;
 			deadtime = 0;
@@ -293,7 +292,7 @@ int main(int argc, char* args[])
 						//play fire sound effect
 						if (sound == 1)Mix_PlayChannel(-1, player_fire, 0);
 						p_bull.x_pos = player.x_pos + 36;
-						p_bull.y_pos = player.y_pos + 18;
+						p_bull.y_pos = player.y_pos + 25;
 						bullet_list.push_back(p_bull);
 						player.gun = false;
 					}
@@ -310,18 +309,20 @@ int main(int argc, char* args[])
 						_enemy.x_pos -= 5; _enemy.mCollider.x = _enemy.x_pos;
 						if (checkCollision(_enemy.mCollider, player.mCollider)) {
 							frame.push_back(0);
-							x_explosion.push_back(_enemy.mCollider.x - 50);
+							x_explosion.push_back(_enemy.mCollider.x - 100);
 							y_explosion.push_back(_enemy.mCollider.y - 75);
 							dead = true;
 							_enemy.x_pos = 1280;
 							_enemy.y_pos = rand() % 672;
 							if (_enemy.y_pos < 100) _enemy.y_pos += 100;
+							if (_enemy.y_pos > 640) _enemy.y_pos -= 35;
 							deadtime = currentTime + 500;
 						}
 						if (_enemy.x_pos < 0) {
 							_enemy.x_pos = 1280;
 							_enemy.y_pos = rand() % 672;
 							if (_enemy.y_pos < 100) _enemy.y_pos += 100;
+							if (_enemy.y_pos > 640) _enemy.y_pos -= 35;
 
 							_enemy.mCollider.x = _enemy.x_pos;
 							_enemy.mCollider.y = _enemy.y_pos;
@@ -351,7 +352,7 @@ int main(int argc, char* args[])
 						enemy_bull.mCollider.y = e_bull.y_pos;
 						if (checkCollision(e_bull.mCollider, player.mCollider)) {
 							frame.push_back(0);
-							x_explosion.push_back(e_bull.mCollider.x - 50);
+							x_explosion.push_back(e_bull.mCollider.x - 100);
 							y_explosion.push_back(e_bull.mCollider.y - 75);
 							dead = true;
 							enemy_bulls.erase(enemy_bulls.begin() + i);
@@ -404,6 +405,7 @@ int main(int argc, char* args[])
 								_enemy.x_pos = 1280;
 								_enemy.y_pos = rand() % 672;
 								if (_enemy.y_pos < 100) _enemy.y_pos += 100;
+								if (_enemy.y_pos > 640) _enemy.y_pos -= 35;
 								point++;
 								pointx++;
 							}
@@ -587,6 +589,7 @@ int main(int argc, char* args[])
 						_enemy.mCollider.x = _enemy.x_pos;
 						_enemy.y_pos = rand() % 672;
 						if (_enemy.y_pos < 100) _enemy.y_pos += 100;
+						if (_enemy.y_pos > 640) _enemy.y_pos -= 35;
 						_enemy.mCollider.y = _enemy.y_pos;
 					}
 					healthpoint = 20;
