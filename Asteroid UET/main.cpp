@@ -152,7 +152,7 @@ int main(int argc, char* args[])
 	
 
 	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
-	bullet boss_aks(boss_bull,1100,300);
+	bullet boss_aks(boss_bull,1100,350);
 	vector<bullet> boss_bulls;
 	int healthpoint = 20;
 	bool live = false;
@@ -427,7 +427,8 @@ int main(int argc, char* args[])
 									smally_explosion.push_back(bull.mCollider.y - 15);
 								}
 								if (healthpoint == 0) {
-									healthpoint += 1; pointx = 0;
+									healthpoint += 20; pointx = 0;
+									boss_bulls.clear();
 								}
 							}
 						}
@@ -438,7 +439,7 @@ int main(int argc, char* args[])
 					timer.unpause();
 
 					//if (currentTime % 1000 == 0) cout << currentTime;
-					if (pointx > 0 && healthpoint > 0) live = true;
+					if (pointx > 10 && healthpoint > 0) live = true;
 					else live = false;
 					if (live == true) {
 						{ window.render(1100, 300, boss);
@@ -559,7 +560,7 @@ int main(int argc, char* args[])
 						window.rendertext(tmp.c_str(), 45, 720, 100 + 40 * j);
 					}
 				}
-				window.handleEvent(event, start, rect, pause);
+				window.handleQuit(event, start, rect[3], window.window);
 				window.display();
 			}
 			if (start == 2)
@@ -629,7 +630,7 @@ int main(int argc, char* args[])
 				window.render(825, 605, square);
 				window.rendertext("Turn Back", 50, 900, 600, rect[3]);
 
-				window.handleEvent(event, start, rect, pause);
+				window.handleQuit(event, start, rect[3], window.window);
 				window.display();
 			}
 		}
