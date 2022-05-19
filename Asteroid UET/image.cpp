@@ -77,6 +77,15 @@ void RenderWindow::renderExplosion(int x, int y, SDL_Rect* clip, SDL_Texture* p_
 	SDL_RenderCopy(renderer, p_tex, clip, &renderQuad);
 }
 
+void RenderWindow::renderSmallExplosion(int x, int y, SDL_Rect* clip, SDL_Texture* p_tex)
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, 60, 60 };
+
+	//Render to screen
+	SDL_RenderCopy(renderer, p_tex, clip, &renderQuad);
+}
+
 void RenderWindow::renderPortion(int x, int y, int size_x, int size_y, SDL_Rect* clip, SDL_Texture* p_tex, SDL_Rect &rect)
 {
 	//Set rendering space and render to screen
