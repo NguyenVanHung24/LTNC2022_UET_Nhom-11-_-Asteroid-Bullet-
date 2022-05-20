@@ -264,7 +264,7 @@ int main(int argc, char* args[])
 				window.rendertext("YOUR SCORE:", 60, 470, 260);
 				window.rendertext("BACK TO MAIN SCREEN IN", 60, 370, 350);
 				string secondsleft = to_string(i);
-				SDL_Texture* secs = window.loadTextureFromText(secondsleft, 1150, 0, 60);
+				SDL_Texture* secs = window.loadTextureFromText(secondsleft, 920, 350, 60);
 				window.render(920, 350, secs);
 				window.render(820, 260, Point[point]);
 				SDL_RenderPresent(window.renderer);
@@ -313,23 +313,25 @@ int main(int argc, char* args[])
 					}
 					if (bonustime == 0) {
 						bonus.x_pos = rand() % 1280;
-						bonus.y_pos = rand() % 672;
+						bonus.y_pos = rand() % 665;
 						bonus.mCollider.x = bonus.x_pos;
 						bonus.mCollider.y = bonus.y_pos;
-						if (bonus.y_pos < 100) bonus.y_pos += 100;
+						if (bonus.y_pos < 100) bonus.y_pos += 150;
 					}
 					bonustime++;
 					if (bonustime < 350) {
 						if (checkCollision(bonus.mCollider, player.mCollider)) {
 							point += 5;
 							bonustime = 500;
+							bonus.mCollider.x = -1000;
+							bonus.mCollider.y = -1000;
 						}
 						else {
 							window.render(bonus, bonus.x_pos, bonus.y_pos);
 						}
 					}
 					else {
-						randomvar = rand() % 300; cout << randomvar << endl;
+						randomvar = rand() % 300;
 					}
 					
 
@@ -414,7 +416,7 @@ int main(int argc, char* args[])
 
 					//set condition position
 					{if (player.y_pos < 100) player.y_pos = 100;
-					if (player.y_pos > 720 - 48) player.y_pos = 720 - 48;
+					if (player.y_pos > 720 - 60) player.y_pos = 720 - 60;
 					if (player.x_pos < 0) player.x_pos = 0;
 					if (player.x_pos > 1280 - 46) player.x_pos = 1280 - 46;
 
@@ -616,10 +618,14 @@ int main(int argc, char* args[])
 					player.mCollider.y = 0;
 					player.x_pos = 0;
 					player.y_pos = 0;
+					bonus.mCollider.x = -1000;
+					bonus.mCollider.y = -1000;
 
 					boss_bulls.clear();
 					enemy_bulls.clear();
 					bullet_list.clear();
+					bonustime = 500;
+					randomvar = 50;
 					for (auto& _enemy : enemy_team) {
 						_enemy.x_pos += 1280;
 						_enemy.mCollider.x = _enemy.x_pos;
