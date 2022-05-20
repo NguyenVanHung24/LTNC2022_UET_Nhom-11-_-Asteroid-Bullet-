@@ -149,6 +149,13 @@ int main(int argc, char* args[])
 	enemy Boss(boss);
 	Boss.mCollider.x = -1000;
 	Boss.mCollider.y = -1000;
+
+	//init bonus
+	SDL_Texture* bonuspic = window.loadTexture("D:/Asteroid UET/image/bonus.png");
+	enemy bonus(bonuspic);
+	bonus.mCollider.x = -1000;
+	bonus.mCollider.y = -1000;
+
 	
 
 	SDL_Texture* boss_bull = window.loadTexture("D:/Asteroid UET/image/biglaser.png");
@@ -222,6 +229,8 @@ int main(int argc, char* args[])
 	bool dead = false;
 	int deadtime = 0;
 	int pointx = 0;
+	int bonustime = 500;
+	int randomvar = 50;
 	vector<int> frame;
 	vector<int> x_explosion;
 	vector<int> y_explosion;
@@ -296,6 +305,33 @@ int main(int argc, char* args[])
 						bullet_list.push_back(p_bull);
 						player.gun = false;
 					}
+					
+					// render bonus and random algorithms
+					if (randomvar == 0) {
+						bonustime = 0;
+						randomvar = 50;
+					}
+					if (bonustime == 0) {
+						bonus.x_pos = rand() % 1280;
+						bonus.y_pos = rand() % 672;
+						bonus.mCollider.x = bonus.x_pos;
+						bonus.mCollider.y = bonus.y_pos;
+						if (bonus.y_pos < 100) bonus.y_pos += 100;
+					}
+					bonustime++;
+					if (bonustime < 350) {
+						if (checkCollision(bonus.mCollider, player.mCollider)) {
+							point += 5;
+							bonustime = 500;
+						}
+						else {
+							window.render(bonus, bonus.x_pos, bonus.y_pos);
+						}
+					}
+					else {
+						randomvar = rand() % 300; cout << randomvar << endl;
+					}
+					
 
 
 					//render enemy team and bull
