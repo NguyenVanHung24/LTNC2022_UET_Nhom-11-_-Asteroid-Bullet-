@@ -314,9 +314,9 @@ int main(int argc, char* args[])
 					if (bonustime == 0) {
 						bonus.x_pos = rand() % 1280;
 						bonus.y_pos = rand() % 665;
+						if (bonus.y_pos < 100) bonus.y_pos += 100;
 						bonus.mCollider.x = bonus.x_pos;
 						bonus.mCollider.y = bonus.y_pos;
-						if (bonus.y_pos < 100) bonus.y_pos += 150;
 					}
 					bonustime++;
 					if (bonustime < 350) {
@@ -331,7 +331,7 @@ int main(int argc, char* args[])
 						}
 					}
 					else {
-						randomvar = rand() % 300;
+						randomvar = rand() % 500;
 					}
 					
 

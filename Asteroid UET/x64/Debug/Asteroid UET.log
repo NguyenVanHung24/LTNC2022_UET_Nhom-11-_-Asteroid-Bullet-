@@ -4,8 +4,8 @@ D:\Asteroid UET\Asteroid UET\main.cpp(220,30): warning C4244: '=': conversion fr
 D:\Asteroid UET\Asteroid UET\main.cpp(260,25): warning C4018: '>': signed/unsigned mismatch
 D:\Asteroid UET\Asteroid UET\main.cpp(315,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(316,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Asteroid UET\Asteroid UET\main.cpp(317,32): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(318,32): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Asteroid UET\Asteroid UET\main.cpp(319,32): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(344,34): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(345,34): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 D:\Asteroid UET\Asteroid UET\main.cpp(347,53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
