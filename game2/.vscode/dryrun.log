@@ -1,0 +1,5 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make: Entering directory 'c:/Users/Dell/Desktop/game'
+g++ -Isource/include/SDL2 -Lsource/lib -o main *.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+make: Leaving directory 'c:/Users/Dell/Desktop/game'
+ 
