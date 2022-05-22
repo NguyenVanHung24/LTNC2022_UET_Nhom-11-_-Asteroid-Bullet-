@@ -16,5 +16,5 @@ instructor/Screenshot 2022-05-22 000408.png
 
 How to play:
 Download only file: game2
-In Folder using cmd and write mingw32-make run,after that, you can enjoy game.
+In Folder using cmd and write mingw32-make run in cmd,after that, you can enjoy game.
 instructor/Screenshot 2022-05-22 000129.png
