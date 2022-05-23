@@ -581,11 +581,11 @@ int main(int argc, char* args[])
 				window.clear();
 				window.render(highscore);
 				window.render(820, 620, square);
-				window.rendertext("Turn Back", 50, 900, 600, rect[3]);
+				window.rendertext("Turn Back", 50, 880, 605, rect[3]);
 				for (int j = 1; j <= 8; j++)
 				{
 					string tmp = "TOP  " + to_string(j);
-					window.rendertext(tmp.c_str(), 45, 300, 100 + 60 * j);
+					window.rendertext(tmp.c_str(), 45, 480, 70 + 60 * j);
 
 				}
 				sort(score.begin(), score.end(), greater<int>());
@@ -593,19 +593,19 @@ int main(int argc, char* args[])
 					for (int j = 1; j <= 8; j++)
 					{
 						string tmp = to_string(score[j - 1]);
-						window.rendertext(tmp.c_str(), 45, 720, 100 + 60 * j);
+						window.rendertext(tmp.c_str(), 45, 720, 70 + 60 * j);
 
 					}
 				else {
 					for (int j = 1; j <= score.size(); j++)
 					{
 						string tmp = to_string(score[j - 1]);
-						window.rendertext(tmp.c_str(), 45, 720, 100 + 60 * j);
+						window.rendertext(tmp.c_str(), 45, 720, 70 + 60 * j);
 
 					}
 					for (int j = score.size() + 1; j <= 8 ; j++) {
 						string tmp = to_string(0);
-						window.rendertext(tmp.c_str(), 45, 720, 100 + 60 * j);
+						window.rendertext(tmp.c_str(), 45, 720, 70 + 60 * j);
 					}
 				}
 				window.handleQuit(event, start, rect[3], window.window);
@@ -681,7 +681,7 @@ int main(int argc, char* args[])
 				//text
 				window.render(335, 180, aboutscreen);
 				window.render(825, 605, square);
-				window.rendertext("Turn Back", 50, 900, 600, rect[3]);
+				window.rendertext("Turn Back", 50, 880, 590, rect[3]);
 
 				window.handleQuit(event, start, rect[3], window.window);
 				window.display();
