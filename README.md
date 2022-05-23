@@ -27,9 +27,19 @@ Make an air survival game!
 
 ## How to play
 
-Download only file: game2
+###### If you have not installed MinGW
+First, you have to install MinGW. Here are the instructions:
+1. Download in [MinGW Distro] (https://nuwen.net/mingw.html).
+2. Click on **mingw-18.0.exe**.
+3. Launch the downloaded file to extract.
+4. Go to Control Panel -> System -> Advanced System Setting -> Environment Variable -> Edit path from System variable -> New and paste the path to the extracted file.
+5. Click OK to save.
+After that, you have finished installing MinGW.
 
-In Folder game2, open cmd and type command:
+###### If you have already installed MinGW
+Click on folder **game2**.
+
+In folder game2, open cmd and type command:
 
 ```
 mingw32-make run
